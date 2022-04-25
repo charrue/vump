@@ -1,0 +1,6 @@
+.vscode
+.history
+dist/
+node_modules
+.pnpm-lock.yaml
+.pnpm-debug.log
