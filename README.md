@@ -13,3 +13,44 @@
 - [ ] 状态管理(Mobx)
 - [ ] TypeScript支持
 - [ ] 周边功能支持
+
+
+## 基础使用
+``` javascript
+import { createComponent } from "@charrue/vump"
+
+const someMixin = {
+  created() {
+    console.log("someMixin created")
+  },
+  onShareMessage() {
+    // 
+  }
+}
+
+createComponent({
+  mixins: [someMixin],
+  data: {
+    foo: "foo"
+  },
+  watch: {
+    foo() {
+      console.log("foo changed")
+    }
+  },
+  computed: {
+    computedFoo() {
+      return `computed ${this.foo}`
+    }
+  },
+  created() {
+    console.log("onLoad")
+    this.init()
+  },
+  methods: {
+    init() {
+      console.log("init")
+    }
+  }
+})
+```
