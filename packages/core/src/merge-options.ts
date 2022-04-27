@@ -1,8 +1,5 @@
 import { mergeLeft, omit, pick } from "ramda";
-import {
-  HOOKS_HAS_RETURN,
-  LIFECYCLE_HOOKS,
-} from "./helper/lifecycle";
+import { HOOKS_HAS_RETURN, LIFECYCLE_HOOKS } from "./helper/lifecycle";
 import type { PlainObject, Keyof, Fn } from "./types";
 
 /**
@@ -46,10 +43,10 @@ export const mergeMethodOptions = <PM extends PlainObject, CM extends PlainObjec
 ) => {
   const parentCustomMethods = omit(LIFECYCLE_HOOKS, parent);
   const childCustomMethods = omit(LIFECYCLE_HOOKS, child);
-  return mergeLeft<
-    typeof parentCustomMethods,
-    typeof childCustomMethods
-  >(parentCustomMethods, childCustomMethods);
+  return mergeLeft<typeof parentCustomMethods, typeof childCustomMethods>(
+    parentCustomMethods,
+    childCustomMethods,
+  );
 };
 
 /**
@@ -68,16 +65,14 @@ export const mergeMethodsToArray = <PM extends PlainObject<Fn>, CM extends Plain
 ) => {
   const methodMap: Record<Keyof<typeof parent> | Keyof<typeof child>, Fn[]> = {} as any;
 
-  Object.keys(parent)
-    .forEach((key: Keyof<typeof parent>) => {
-      methodMap[key] = [parent[key]];
-    });
+  Object.keys(parent).forEach((key: Keyof<typeof parent>) => {
+    methodMap[key] = [parent[key]];
+  });
 
-  Object.keys(child)
-    .forEach((key: Keyof<typeof child>) => {
-      methodMap[key] = methodMap[key] || [];
-      methodMap[key].push(child[key]);
-    });
+  Object.keys(child).forEach((key: Keyof<typeof child>) => {
+    methodMap[key] = methodMap[key] || [];
+    methodMap[key].push(child[key]);
+  });
 
   return methodMap;
 };
@@ -99,8 +94,8 @@ export const mergeLifecycleOptions = <P extends PlainObject<Fn>, C extends Plain
   );
   const composedLifecycleCallbacks: Record<Keyof<typeof lifecycleCallbacks>, Fn> = {} as any;
 
-  (Object.keys(lifecycleCallbacks) as (Keyof<typeof lifecycleCallbacks>)[])
-    .forEach((lifecycleName) => {
+  (Object.keys(lifecycleCallbacks) as Keyof<typeof lifecycleCallbacks>[]).forEach(
+    (lifecycleName) => {
       const callbacks = lifecycleCallbacks[lifecycleName];
       if (!Array.isArray(callbacks) || callbacks.length === 0) return;
 
@@ -113,14 +108,15 @@ export const mergeLifecycleOptions = <P extends PlainObject<Fn>, C extends Plain
         }
 
         // callbacks 的执行顺序是 parent -> child
-        for (let i = 0;i < callbacks.length;i++) {
+        for (let i = 0; i < callbacks.length; i++) {
           if (typeof callbacks[i] === "function") {
             callbacks[i].call(this, query);
           }
         }
         return undefined;
       };
-    });
+    },
+  );
 
   return composedLifecycleCallbacks;
 };

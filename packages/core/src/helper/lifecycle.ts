@@ -42,12 +42,13 @@ export const HOOKS_HAS_RETURN = [
   "onShareTimeline",
 ] as const;
 
-export const LIFECYCLE_HOOKS = [
-  ...APP_HOOKS,
-  ...PAGE_HOOKS,
-  ...COMPONENT_HOOKS,
-] as const;
+export const LIFECYCLE_HOOKS = [...APP_HOOKS, ...PAGE_HOOKS, ...COMPONENT_HOOKS] as const;
 
 export type ComponentHooksUnion = typeof COMPONENT_HOOKS[number];
 export type PageHooksUnion = typeof PAGE_HOOKS[number];
-export type LifecycleUnion = ComponentHooksUnion | PageHooksUnion | "onLaunch" | "onError" | "onUnhandledRejection";
+export type LifecycleUnion =
+  | ComponentHooksUnion
+  | PageHooksUnion
+  | "onLaunch"
+  | "onError"
+  | "onUnhandledRejection";

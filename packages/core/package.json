@@ -1,0 +1,36 @@
+{
+  "name": "@charrue/vump",
+  "version": "0.0.1",
+  "description": "🚴类Vue语法的微信小程序轻量级框架, 基于原生开发标准",
+  "keywords": [
+    "typescript",
+    "charrue",
+    "miniprogram",
+    "vitest"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs.js",
+  "jsdelivr": "./dist/index.iife.min.js",
+  "unpkg": "./dist/index.iife.min.js",
+  "module": "dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint --fix",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "ramda": "^0.28.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@types/ramda": "^0.28.11",
+    "esbuild": "^0.14.1",
+    "miniprogram-api-typings": "^3.4.6",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.2",
+    "rollup-plugin-dts": "^4.0.1",
+    "rollup-plugin-esbuild": "^4.7.2"
+  }
+}

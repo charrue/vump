@@ -1,9 +1,4 @@
-import {
-  test,
-  expect,
-  describe,
-  fn,
-} from "vitest";
+import { test, expect, describe, fn } from "vitest";
 import {
   mergeDataOptions,
   mergeMethodOptions,
@@ -20,13 +15,10 @@ describe("use mergeDataOptions", () => {
     const obj2 = {
       version: "0.0.1",
     };
-    expect(
-      mergeDataOptions(obj1, obj2),
-    )
-      .toEqual({
-        ...obj1,
-        ...obj2,
-      });
+    expect(mergeDataOptions(obj1, obj2)).toEqual({
+      ...obj1,
+      ...obj2,
+    });
   });
 
   test("two objects have partially identical key names", () => {
@@ -40,13 +32,10 @@ describe("use mergeDataOptions", () => {
       version: "0.0.1",
       issues: 10,
     };
-    expect(
-      mergeDataOptions(obj1, obj2),
-    )
-      .toEqual({
-        ...obj1,
-        issues: 10,
-      });
+    expect(mergeDataOptions(obj1, obj2)).toEqual({
+      ...obj1,
+      issues: 10,
+    });
   });
 
   test("two objects have same key names", () => {
@@ -60,12 +49,9 @@ describe("use mergeDataOptions", () => {
       language: "javascript",
       version: "0.0.1",
     };
-    expect(
-      mergeDataOptions(obj1, obj2),
-    )
-      .toEqual({
-        ...obj1,
-      });
+    expect(mergeDataOptions(obj1, obj2)).toEqual({
+      ...obj1,
+    });
   });
 });
 
@@ -84,11 +70,10 @@ describe("use mergeMethodOptions", () => {
     };
 
     const merged = mergeMethodOptions(obj1, obj2);
-    expect(merged)
-      .toEqual({
-        ...obj1,
-        fun3: obj2.fun3,
-      });
+    expect(merged).toEqual({
+      ...obj1,
+      fun3: obj2.fun3,
+    });
 
     merged.fun2();
     expect(fn2).toHaveBeenCalled();
@@ -111,13 +96,10 @@ describe("use mergeMethodOptions", () => {
       created: fn3,
     };
 
-    expect(
-      mergeMethodOptions(obj1, obj2),
-    )
-      .toEqual({
-        fun1: fn1,
-        fun3: fn3,
-      });
+    expect(mergeMethodOptions(obj1, obj2)).toEqual({
+      fun1: fn1,
+      fun3: fn3,
+    });
   });
 });
 
@@ -169,14 +151,7 @@ describe("use mergeLifecycleOptions", () => {
     const merged = mergeLifecycleOptions(obj1, obj2);
 
     test("should only have lifecycle functions", () => {
-      expect(
-        Object.keys(merged).sort(),
-      )
-        .toEqual([
-          "onLoad",
-          "onShareAppMessage",
-          "created",
-        ].sort());
+      expect(Object.keys(merged).sort()).toEqual(["onLoad", "onShareAppMessage", "created"].sort());
     });
 
     test("same lifecycle functions should composed", () => {
