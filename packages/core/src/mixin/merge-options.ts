@@ -1,6 +1,6 @@
 import { mergeLeft, omit, pick } from "ramda";
-import { HOOKS_HAS_RETURN, LIFECYCLE_HOOKS } from "./helper/lifecycle";
-import type { PlainObject, Keyof, Fn } from "./types";
+import { HOOKS_HAS_RETURN, LIFECYCLE_HOOKS } from "../helper/lifecycle";
+import type { PlainObject, Keyof, Fn } from "../types";
 
 /**
  * @description
@@ -84,7 +84,7 @@ export const mergeMethodsToArray = <PM extends PlainObject<Fn>, CM extends Plain
  * @param parent - 父级的生命周期函数
  * @param child - 子级的生命周期函数
  */
-export const mergeLifecycleOptions = <P extends PlainObject<Fn>, C extends PlainObject<Fn>>(
+export const mergeLifecycleOptions = <P extends Record<string, any>, C extends Record<string, any>>(
   parent: P,
   child: C,
 ) => {

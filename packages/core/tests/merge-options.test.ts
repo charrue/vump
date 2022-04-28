@@ -4,7 +4,7 @@ import {
   mergeMethodOptions,
   mergeMethodsToArray,
   mergeLifecycleOptions,
-} from "./../src/merge-options";
+} from "./../src/mixin/merge-options";
 
 describe("use mergeDataOptions", () => {
   test("two objects have different key names", () => {
