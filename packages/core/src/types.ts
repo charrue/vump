@@ -15,3 +15,5 @@ export type LifecycleFn =
 export type ConstructorOptions = WechatMiniprogram.Page.Options<PlainObject, PlainObject>;
 
 export type Keyof<T> = keyof T;
+
+export type ComponentOptions = Record<string, any>;
