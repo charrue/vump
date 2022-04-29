@@ -39,7 +39,6 @@ export namespace VumpFactory {
   };
 
   export type OtherOption = Omit<WechatMiniprogram.Component.OtherOption, "pageLifetimes">;
-  export type Lifetimes = WechatMiniprogram.Component.Lifetimes;
 
   export type ComponentInstance<
     TData extends DefaultDataOption,
@@ -88,7 +87,7 @@ export namespace VumpFactory {
     Partial<VumpFactory.Computed<TWatch>> & // watch
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
-    Partial<VumpFactory.Lifetimes> &
+    Partial<WechatMiniprogram.Component.Lifetimes> &
     ThisType<
       ComponentInstance<TData, TProperty, TMethod, TComputed, TCustomInstanceProperty, TIsPage>
     >;
@@ -104,6 +103,7 @@ export namespace VumpFactory {
     Partial<VumpFactory.Computed<TComputed>> & // computed
     Partial<VumpFactory.Computed<TWatch>> & // watch
     Partial<VumpFactory.Mixin> & // mixins
+    Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Page.ILifetime> &
     ThisType<PageInstance<TData, TMethod, TComputed, TCustomInstanceProperty>>;
 

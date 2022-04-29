@@ -1,7 +1,8 @@
 import { mergeLeft, omit, pick } from "ramda";
-import { HOOKS_HAS_RETURN, LIFECYCLE_HOOKS } from "../helper/lifecycle";
-import type { PlainObject, Keyof, Fn } from "../types";
+import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../helper/lifecycle";
+import type { PlainObject, Keyof, Fn } from "../types/utils";
 
+const LIFECYCLE_HOOKS = [...PAGE_LIFETIMES, ...COMPONENT_LIFETIMES] as const;
 /**
  * @description
  * 对data选项进行合并
@@ -43,10 +44,11 @@ export const mergeMethodOptions = <PM extends PlainObject, CM extends PlainObjec
 ) => {
   const parentCustomMethods = omit(LIFECYCLE_HOOKS, parent);
   const childCustomMethods = omit(LIFECYCLE_HOOKS, child);
-  return mergeLeft<typeof parentCustomMethods, typeof childCustomMethods>(
+  const res = mergeLeft<typeof parentCustomMethods, typeof childCustomMethods>(
     parentCustomMethods,
     childCustomMethods,
   );
+  return res;
 };
 
 /**

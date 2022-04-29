@@ -1,40 +1,4 @@
-export const APP_HOOKS = [
-  "onLaunch",
-  "onShow",
-  "onHide",
-  "onError",
-  "onShareAppMessage",
-  "onUnhandledRejection",
-] as const;
-
-export const PAGE_HOOKS = [
-  "onLoad",
-  "onReady",
-  "onShow",
-  "onHide",
-  "onUnload",
-  "onPullDownRefresh",
-  "onReachBottom",
-  "onPageScroll",
-  "onTitleClick",
-  "onOptionMenuClick",
-  "onUpdated",
-  "onBeforeCreate",
-  "onAddToFavorites",
-  "onShareAppMessage",
-  "onShareTimeline",
-] as const;
-
-export const COMPONENT_HOOKS = [
-  "created",
-  "attached",
-  "ready",
-  "detached",
-  "error",
-  "show",
-  "hide",
-  "resize",
-] as const;
+/* eslint-disable @typescript-eslint/indent */
 
 export const HOOKS_HAS_RETURN = [
   "onAddToFavorites",
@@ -42,13 +6,44 @@ export const HOOKS_HAS_RETURN = [
   "onShareTimeline",
 ] as const;
 
-export const LIFECYCLE_HOOKS = [...APP_HOOKS, ...PAGE_HOOKS, ...COMPONENT_HOOKS] as const;
+export type PageLifetime = keyof WechatMiniprogram.Page.ILifetime;
 
-export type ComponentHooksUnion = typeof COMPONENT_HOOKS[number];
-export type PageHooksUnion = typeof PAGE_HOOKS[number];
-export type LifecycleUnion =
-  | ComponentHooksUnion
-  | PageHooksUnion
-  | "onLaunch"
-  | "onError"
-  | "onUnhandledRejection";
+export const PAGE_LIFETIMES: PageLifetime[] = [
+  "onLoad",
+  "onShow",
+  "onReady",
+  "onHide",
+  "onUnload",
+  "onPullDownRefresh",
+  "onReachBottom",
+  "onShareAppMessage",
+  "onShareTimeline",
+  "onPageScroll",
+  "onTabItemTap",
+  "onResize",
+  "onAddToFavorites",
+];
+export type ComponentLifetime =
+  | keyof WechatMiniprogram.Component.Lifetimes["lifetimes"]
+  | keyof WechatMiniprogram.Component.PageLifetimes;
+
+export const COMPONENT_LIFETIMES: ComponentLifetime[] = [
+  "created",
+  "attached",
+  "ready",
+  "moved",
+  "detached",
+  "error",
+  "show",
+  "hide",
+  "resize",
+];
+
+export const APP_LIFETIMES = [
+  "onLaunch",
+  "onShow",
+  "onHide",
+  "onError",
+  "onShareAppMessage",
+  "onUnhandledRejection",
+] as const;
