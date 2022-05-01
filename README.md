@@ -7,11 +7,11 @@
 
 ## 特性
 
-- [ ] 基于原生开发(利用`Component`)
-- [ ] 数据响应增强(computed、watch)
-- [ ] 逻辑复用(mixins)
+- [x] 基于原生开发(利用`Component`)
+- [x] 数据响应增强(computed、watch)
+- [x] 逻辑复用(mixins)
 - [ ] 状态管理(Mobx)
-- [ ] TypeScript支持
+- [x] TypeScript支持
 - [ ] 周边功能支持
 
 
