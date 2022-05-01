@@ -4,7 +4,7 @@ import { mergeDataOptions, mergeLifecycleOptions, mergeMethodOptions } from "./m
 
 export const useMixins = (
   options: VumpFactory.IAnyObject,
-  mixins: VumpFactory.Mixin["mixins"] = [],
+  mixins: VumpFactory.IAnyObject[] = [],
 ) => {
   if (Array.isArray(mixins) && mixins.length > 0) {
     mixins.forEach((mixin) => {
