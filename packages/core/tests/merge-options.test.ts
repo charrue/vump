@@ -69,7 +69,7 @@ describe("use mergeMethodOptions", () => {
       fun2: fn3,
     };
 
-    const merged = mergeMethodOptions(obj1, obj2);
+    const merged = mergeMethodOptions(obj1, obj2) as Record<string, any>;
     expect(merged).toEqual({
       ...obj1,
       fun3: obj2.fun3,

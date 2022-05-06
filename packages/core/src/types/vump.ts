@@ -34,8 +34,8 @@ export namespace VumpFactory {
   export type Mixin = {
     /** 组件的复用功能，现版本不支持mixins的嵌套  */
     mixins?: (Data<DefaultDataOption> &
-      Property<DefaultPropertyOption> &
-      Method<DefaultMethodOption>)[];
+      Partial<Property<DefaultPropertyOption>> &
+      Partial<Method<DefaultMethodOption>>)[];
   };
 
   export type OtherOption = Omit<WechatMiniprogram.Component.OtherOption, "pageLifetimes">;

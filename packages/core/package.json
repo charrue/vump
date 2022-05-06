@@ -16,7 +16,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "lint": "eslint --fix",
+    "lint": "eslint --fix src/**/*.ts",
     "test": "vitest"
   },
   "dependencies": {

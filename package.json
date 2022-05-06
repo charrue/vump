@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm run build --filter=@charrue/vump",
-    "lint": "eslint --fix",
+    "lint": "pnpm run lint --filter=@charrue/vump",
     "prepare": "husky install",
     "test": "vitest"
   },
