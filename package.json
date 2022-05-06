@@ -17,7 +17,7 @@
     "test": "vitest"
   },
   "lint-staged": {
-    "*.ts": "npm run lint"
+    "!(*.d).ts": "npm run lint"
   },
   "config": {
     "commitizen": {
