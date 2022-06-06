@@ -29,6 +29,8 @@
     "@types/ramda": "^0.28.11",
     "esbuild": "^0.14.1",
     "miniprogram-api-typings": "^3.4.6",
+    "miniprogram-exparser": "^2.15.0",
+    "miniprogram-simulate": "^1.5.7",
     "rimraf": "^3.0.2",
     "rollup": "^2.60.2",
     "rollup-plugin-dts": "^4.0.1",
