@@ -5,8 +5,12 @@ export namespace VumpFactory {
   export type DefaultDataOption = WechatMiniprogram.Component.DataOption;
   export type DefaultPropertyOption = WechatMiniprogram.Component.PropertyOption;
   export type DefaultMethodOption = WechatMiniprogram.Component.MethodOption;
-  export type DefaultWatchOption = Record<string, Function>;
-  export type DefaultComputedOption = Record<string, Function>;
+  export interface DefaultWatchOption {
+    [k: string]: (...args: any[]) => void;
+  }
+  export interface DefaultComputedOption<T> {
+    [k: string]: (data: T) => any;
+  }
   export type IAnyObject = WechatMiniprogram.IAnyObject;
 
   export interface Data<D extends DefaultDataOption> {
@@ -22,7 +26,7 @@ export namespace VumpFactory {
     methods: M & (TIsPage extends true ? Partial<WechatMiniprogram.Page.ILifetime> : IAnyObject);
   }
 
-  export interface Computed<C extends Partial<DefaultComputedOption>> {
+  export interface Computed<C> {
     /** 组件的计算属性 */
     computed?: C;
   }
@@ -44,7 +48,7 @@ export namespace VumpFactory {
     TData extends DefaultDataOption,
     TProperty extends DefaultPropertyOption,
     TMethod extends Partial<DefaultMethodOption>,
-    TComputed extends Partial<DefaultComputedOption>,
+    TComputed extends Partial<DefaultComputedOption<TData & { [K in keyof TProperty]: any }>>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
   > = WechatMiniprogram.Component.InstanceProperties &
@@ -60,7 +64,7 @@ export namespace VumpFactory {
   export type PageInstance<
     TData extends DefaultDataOption,
     TMethod extends Partial<DefaultMethodOption>,
-    TComputed extends Partial<DefaultComputedOption>,
+    TComputed extends Partial<DefaultComputedOption<TData>>,
     TWatch extends Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
   > = WechatMiniprogram.Component.InstanceProperties &
@@ -76,7 +80,7 @@ export namespace VumpFactory {
     TData extends DefaultDataOption,
     TProperty extends DefaultPropertyOption,
     TMethod extends DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption>,
+    TComputed extends Partial<DefaultComputedOption<TData>>,
     TWatch extends Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
@@ -84,7 +88,7 @@ export namespace VumpFactory {
     Partial<VumpFactory.Property<TProperty>> & // property
     Partial<VumpFactory.Method<TMethod, TIsPage>> & // methods
     Partial<VumpFactory.Computed<TComputed>> & // computed
-    Partial<VumpFactory.Computed<TWatch>> & // watch
+    Partial<VumpFactory.Watch<TWatch>> & // watch
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Component.Lifetimes> &
@@ -95,13 +99,13 @@ export namespace VumpFactory {
   export type PageOptions<
     TData extends DefaultDataOption,
     TMethod extends DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption>,
+    TComputed extends Partial<DefaultComputedOption<TData>>,
     TWatch extends Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
   > = Partial<VumpFactory.Data<TData>> & // data
     Partial<VumpFactory.Method<TMethod, true>> & // methods
     Partial<VumpFactory.Computed<TComputed>> & // computed
-    Partial<VumpFactory.Computed<TWatch>> & // watch
+    Partial<VumpFactory.Watch<TWatch>> & // watch
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Page.ILifetime> &
@@ -112,7 +116,7 @@ export namespace VumpFactory {
       TData extends DefaultDataOption,
       TProperty extends DefaultPropertyOption,
       TMethod extends DefaultMethodOption,
-      TComputed extends Partial<DefaultComputedOption>,
+      TComputed extends Partial<DefaultComputedOption<TData>>,
       TWatch extends Partial<DefaultWatchOption>,
       TCustomInstanceProperty extends IAnyObject = IAnyObject,
       TIsPage extends boolean = false,

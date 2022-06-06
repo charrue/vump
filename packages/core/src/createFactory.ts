@@ -17,7 +17,7 @@ export const createFactory = <T extends "component" | "page">(type: T) => {
     TData extends VumpFactory.DefaultDataOption,
     TProperty extends VumpFactory.DefaultPropertyOption,
     TMethod extends VumpFactory.DefaultMethodOption,
-    TComputed extends Partial<VumpFactory.DefaultComputedOption>,
+    TComputed extends Partial<VumpFactory.DefaultComputedOption<TData>>,
     TWatch extends Partial<VumpFactory.DefaultWatchOption>,
     TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.IAnyObject,
   >(
