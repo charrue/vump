@@ -2,6 +2,7 @@
 import { useMixins } from "./mixin/useMixin";
 import { VumpFactory } from "./types/vump";
 import ComputedBehavior from "miniprogram-computed";
+import MobxBehavior from "mobx-miniprogram-bindings";
 import { PAGE_LIFETIMES } from "./helper/lifecycle";
 
 const defaultOptions: {
@@ -42,8 +43,14 @@ export const createFactory = <T extends "component" | "page">(type: T) => {
     if (!options.options) {
       options.options = {};
     }
-    // computed 功能注册
-    options.behaviors.push(ComputedBehavior.behavior);
+
+    if (options.storeBindings) {
+      options.behaviors.push(MobxBehavior.storeBindingsBehavior);
+    }
+    if (options.computed) {
+      // computed 功能注册
+      options.behaviors.push(ComputedBehavior.behavior);
+    }
 
     // 合并options
     if (opt.mixins) {

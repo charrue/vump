@@ -1,6 +1,7 @@
 <view>
-  <view id="sign">sign: {{ sign }}</view>
+  <view id="sign">{{ sign }}</view>
   <view id="count">{{ count }}</view>
+  <view id="next-count">next count is {{ nextCount }}</view>
   <button id="increase" bindtap="onIncrease">Increase</button>
   <button id="decrease" bindtap="onDecrease">Decrease</button>
 </view>

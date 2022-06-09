@@ -5,6 +5,13 @@ export namespace VumpFactory {
   export type DefaultDataOption = WechatMiniprogram.Component.DataOption;
   export type DefaultPropertyOption = WechatMiniprogram.Component.PropertyOption;
   export type DefaultMethodOption = WechatMiniprogram.Component.MethodOption;
+  export type StoreBindingOptions = {
+    namespace?: string;
+    store: any;
+    fields?: Array<string> | Record<string, any | ((store: any) => any)>;
+    actions?: Record<string, string> | Array<string>;
+    structuralComparison?: boolean;
+  };
   export interface DefaultWatchOption {
     [k: string]: (...args: any[]) => void;
   }
@@ -33,6 +40,10 @@ export namespace VumpFactory {
   export interface Watch<D extends Partial<DefaultWatchOption>> {
     /** 组件的监听属性，会在属性值发生变化时进行调用 */
     watch?: D;
+  }
+
+  export interface StoreBindings {
+    storeBindings: StoreBindingOptions;
   }
 
   export type Mixin = {
@@ -89,6 +100,7 @@ export namespace VumpFactory {
     Partial<VumpFactory.Method<TMethod, TIsPage>> & // methods
     Partial<VumpFactory.Computed<TComputed>> & // computed
     Partial<VumpFactory.Watch<TWatch>> & // watch
+    Partial<VumpFactory.StoreBindings> & // storeBindings
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Component.Lifetimes> &
@@ -106,6 +118,7 @@ export namespace VumpFactory {
     Partial<VumpFactory.Method<TMethod, true>> & // methods
     Partial<VumpFactory.Computed<TComputed>> & // computed
     Partial<VumpFactory.Watch<TWatch>> & // watch
+    Partial<VumpFactory.StoreBindings> & // storeBindings
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Page.ILifetime> &

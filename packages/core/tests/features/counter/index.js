@@ -1,8 +1,10 @@
 const { createComponent } = require("../../../dist/index.cjs.js");
+const { record } = require("./store")
 
 createComponent({
   data: {
     count: 0,
+    nextCount: 1
   },
   computed: {
     sign(data) {
@@ -11,16 +13,38 @@ createComponent({
       return data.count > 0 ? "+" : "-";
     },
   },
-  methods: {
-    onIncrease() {
+  watch: {
+    count(count) {
       this.setData({
-        count: this.data.count + 1,
-      });
-    },
-    onDecrease() {
-      this.setData({
-        count: this.data.count - 1,
-      });
+        nextCount: count + 1
+      })
     },
   },
+  storeBindings: {
+    store: record,
+    fields: ["list"],
+    actions: ["updateList", "resetList"],
+  },
+  methods: {
+    onIncrease() {
+      const newCount = this.data.count + 1;
+      this.setData({
+        count: newCount,
+      });
+
+      this.updateList(newCount)
+    },
+    onDecrease() {
+      const newCount = this.data.count - 1;
+
+      this.setData({
+        count: newCount,
+      });
+
+      this.updateList(newCount)
+    },
+  },
+  attached() {
+    this.resetList()
+  }
 });
