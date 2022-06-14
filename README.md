@@ -1,4 +1,4 @@
-<h1 align="center"><span style="color: #34495e">v</span><span style="color: #41b883">u</span><span style="color: #1ed76d">m</span><span style="color: #e5e5e5">p</span></h1>
+<h1 align="center"><span style="color: #34495e">vump</span></h1>
 <p align="center">🚴类Vue语法的微信小程序轻量级工具库，基于原生开发标准</p>
 
 
@@ -14,6 +14,11 @@
 - [x] TypeScript支持
 - [x] 基于[wxstore](https://github.com/Tencent/westore)的data diff
 
+
+### 下载
+``` bash
+npm install mobx-miniprogram @charrue/vump
+```
 
 ## 基础使用
 ``` javascript

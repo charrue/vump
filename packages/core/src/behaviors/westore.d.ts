@@ -10,7 +10,4 @@ interface diffResult {
   key?: any;
 }
 
-export declare function diffData(
-  current: Current,
-  previous: Previous
-): diffResult;
+export declare function diffData(current: Current, previous: Previous): diffResult;
