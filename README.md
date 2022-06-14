@@ -1,5 +1,5 @@
 <h1 align="center"><span style="color: #34495e">v</span><span style="color: #41b883">u</span><span style="color: #1ed76d">m</span><span style="color: #e5e5e5">p</span></h1>
-<p align="center">🚴类Vue语法的微信小程序轻量级框架，基于原生开发标准</p>
+<p align="center">🚴类Vue语法的微信小程序轻量级工具库，基于原生开发标准</p>
 
 
 
@@ -12,45 +12,88 @@
 - [x] 逻辑复用(mixins)
 - [x] 状态管理(Mobx)
 - [x] TypeScript支持
-- [ ] 周边功能支持
+- [x] 基于[wxstore](https://github.com/Tencent/westore)的data diff
 
 
 ## 基础使用
 ``` javascript
-import { createComponent } from "@charrue/vump"
-
-const someMixin = {
-  created() {
-    console.log("someMixin created")
-  },
-  onShareMessage() {
-    // 
-  }
-}
+import { createComponent } from "@charrue/vump";
+import store from "./store"
+import mixin from "./mixin"
 
 createComponent({
-  mixins: [someMixin],
+  mixins: [mixin],
   data: {
-    foo: "foo"
-  },
-  watch: {
-    foo() {
-      console.log("foo changed")
-    }
+    count: 0,
+    nextCount: 1
   },
   computed: {
-    computedFoo() {
-      return `computed ${this.foo}`
-    }
+    sign(data) {
+      if (data.count === 0) return "";
+
+      return data.count > 0 ? "+" : "-";
+    },
   },
-  created() {
-    console.log("onLoad")
-    this.init()
+  watch: {
+    count(count) {
+      this.setData({
+        nextCount: count + 1
+      })
+    },
+  },
+  storeBindings: {
+    store: store,
+    fields: ["list"],
+    actions: ["updateList", "resetList"],
   },
   methods: {
-    init() {
-      console.log("init")
-    }
-  }
+    onIncrease() {
+      const newCount = this.data.count + 1;
+      this.setData({
+        count: newCount,
+      });
+
+      this.updateList(newCount)
+    },
+    onDecrease() {
+      const newCount = this.data.count - 1;
+
+      this.setData({
+        count: newCount,
+      });
+
+      this.updateList(newCount)
+    },
+  },
+});
+
+```
+
+
+``` javascript
+// store.js
+import { observable } from "@charrue/vump";
+
+const store = observable({
+  list: [],
+
+  updateList: action(function (num) {
+    this.list = [...this.list, num]
+  }),
+
+  resetList: action(function (num) {
+    this.list = []
+  })
 })
+
+export default store
+```
+
+``` javascript
+// mixin.js
+export default {
+  attached() {
+    this.resetList()
+  }
+}
 ```
