@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "miniprogram-computed": "^4.3.8",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "westore": "^0.1.9"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",

@@ -1,0 +1,6 @@
+<view>
+  <text>Hello World</text>
+  <text id="foo">{{ foo || "" }}</text>
+  <text id="bar">{{ bar || "" }}</text>
+  <text id="user">{{ userJson }}</text>
+</view>

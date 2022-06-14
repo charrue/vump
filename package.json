@@ -1,7 +1,7 @@
 {
   "name": "vump",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "🚴类Vue语法的微信小程序轻量级框架, 基于原生开发标准",
   "keywords": [
     "typescript",

@@ -4,7 +4,7 @@ import helper from "./helper";
 describe("createComponent", () => {
   test("use options: data & methods", async () => {
     const comp = helper.renderComponent("counter/index");
-    const increaseDom = comp.querySelector("#increase");
+    const increaseDom = comp.querySelector("#increase")!;
 
     expect(comp.data.count).toBe(0);
 
@@ -19,8 +19,8 @@ describe("createComponent", () => {
 
   test("use options: computed & watch", async () => {
     const comp = helper.renderComponent("counter/index");
-    const increaseDom = comp.querySelector("#increase");
-    const decreaseDom = comp.querySelector("#decrease");
+    const increaseDom = comp.querySelector("#increase")!;
+    const decreaseDom = comp.querySelector("#decrease")!;
 
     expect(comp.data.count).toBe(0);
     expect(comp.data.sign).toBe("");
@@ -44,8 +44,8 @@ describe("createComponent", () => {
 
   test("use option: storeBindings", async () => {
     const comp = helper.renderComponent("counter/index");
-    const increaseDom = comp.querySelector("#increase");
-    const decreaseDom = comp.querySelector("#decrease");
+    const increaseDom = comp.querySelector("#increase")!;
+    const decreaseDom = comp.querySelector("#decrease")!;
 
     increaseDom.dispatchEvent("tap");
     await helper.sleep(300);

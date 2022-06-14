@@ -19,6 +19,9 @@ export namespace VumpFactory {
     [k: string]: (data: T) => any;
   }
   export type IAnyObject = WechatMiniprogram.IAnyObject;
+  export interface VumpInnerMethods {
+    diffUpdate(data: Record<string, any>): void;
+  }
 
   export interface Data<D extends DefaultDataOption> {
     /** 组件的内部数据，和 `properties` 一同用于组件的模板渲染 */

@@ -2,7 +2,7 @@ import path from "path";
 import rimraf from "rimraf";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonJs from "@rollup/plugin-commonjs";
-import esbuild, { minify } from "rollup-plugin-esbuild";
+import esbuild from "rollup-plugin-esbuild";
 import dts from "rollup-plugin-dts";
 
 const commonPlugins = [
@@ -38,19 +38,6 @@ const config = [
       return /^vue/.test(id);
     },
     plugins: commonPlugins,
-  },
-  {
-    input,
-    output: {
-      file: getOutput("index.iife.min.js"),
-      name: "Vump",
-      format: "iife",
-      extend: true,
-    },
-    external(id) {
-      return /^vue/.test(id);
-    },
-    plugins: [...commonPlugins, minify()],
   },
   {
     input: "src/index.ts",

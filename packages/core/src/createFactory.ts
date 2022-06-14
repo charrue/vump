@@ -3,6 +3,7 @@ import { useMixins } from "./mixin/useMixin";
 import { VumpFactory } from "./types/vump";
 import ComputedBehavior from "miniprogram-computed";
 import MobxBehavior from "mobx-miniprogram-bindings";
+import { diffBehavior } from "./behaviors/diff";
 import { PAGE_LIFETIMES } from "./helper/lifecycle";
 
 const defaultOptions: {
@@ -20,7 +21,7 @@ export const createFactory = <T extends "component" | "page">(type: T) => {
     TMethod extends VumpFactory.DefaultMethodOption,
     TComputed extends Partial<VumpFactory.DefaultComputedOption<TData>>,
     TWatch extends Partial<VumpFactory.DefaultWatchOption>,
-    TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.IAnyObject,
+    TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.VumpInnerMethods,
   >(
     opt: T extends "page"
       ? VumpFactory.PageOptions<TData, TMethod, TComputed, TWatch, TCustomInstanceProperty>
@@ -51,6 +52,7 @@ export const createFactory = <T extends "component" | "page">(type: T) => {
       // computed 功能注册
       options.behaviors.push(ComputedBehavior.behavior);
     }
+    options.behaviors.push(diffBehavior);
 
     // 合并options
     if (opt.mixins) {
