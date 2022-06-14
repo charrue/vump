@@ -14,7 +14,7 @@ const defaultOptions: {
   data: {},
 };
 
-export const createFactory = <T extends "component" | "page">(type: T) => {
+const createFactory = <T extends "component" | "page">(type: T) => {
   return <
     TData extends VumpFactory.DefaultDataOption,
     TProperty extends VumpFactory.DefaultPropertyOption,

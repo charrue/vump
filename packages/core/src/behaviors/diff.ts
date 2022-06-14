@@ -1,4 +1,4 @@
-import { diffData } from "westore";
+import { diffData } from "./westore.js";
 
 type BehaviorData = Record<string, any>;
 type SetDataCallback = () => void;
