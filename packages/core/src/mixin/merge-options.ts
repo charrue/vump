@@ -1,4 +1,4 @@
-import { mergeLeft, omit, pick } from "ramda";
+import { mergeLeft, omit, pick } from "../helper/utils";
 import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../helper/lifecycle";
 import type { PlainObject, Keyof, Fn } from "../types/utils";
 
@@ -11,16 +11,15 @@ const LIFECYCLE_HOOKS = [...PAGE_LIFETIMES, ...COMPONENT_LIFETIMES] as const;
  *
  * parent会完全覆盖child的值
  *
- * 详细合并规则可以参考 `ramda`的`mergeLeft`方法
  * @param parent - 父级选项的data
  * @param child - 子级选项的data
  * @returns 合并后的data
  * @example
  *
- * mergeDataOption({ age: 10 }, { name: "vump" })
+ * mergeDataOptions({ age: 10 }, { name: "vump" })
  * // => { age: 10, name: "vump" }
  *
- * mergeDataOption({ age: 10 }, { age: 20, name: "vump" })
+ * mergeDataOptions({ age: 10 }, { age: 20, name: "vump" })
  * // => { age: 10, name: "vump" }
  */
 export const mergeDataOptions = <PD extends PlainObject, CD extends PlainObject>(

@@ -20,22 +20,16 @@ const config = [
   {
     input,
     output: {
-      file: getOutput("index.cjs.js"),
+      file: getOutput("index.js"),
       format: "cjs",
-    },
-    external(id) {
-      return /^vue/.test(id);
     },
     plugins: commonPlugins,
   },
   {
     input,
     output: {
-      file: getOutput("index.es.js"),
-      format: "es",
-    },
-    external(id) {
-      return /^vue/.test(id);
+      file: getOutput("index.mjs"),
+      format: "esm",
     },
     plugins: commonPlugins,
   },

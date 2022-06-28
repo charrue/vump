@@ -1,4 +1,4 @@
-import { test, expect, describe, fn } from "vitest";
+import { test, expect, describe, vi } from "vitest";
 import { useMixins } from "./../src/mixin/useMixin";
 
 describe("useMixins", () => {
@@ -32,10 +32,10 @@ describe("useMixins", () => {
   });
 
   test("merge methods", () => {
-    const fn1 = fn();
-    const fn2 = fn();
-    const fn3 = fn();
-    const fn4 = fn();
+    const fn1 = vi.fn();
+    const fn2 = vi.fn();
+    const fn3 = vi.fn();
+    const fn4 = vi.fn();
 
     const mixins = [
       {
@@ -91,9 +91,9 @@ describe("useMixins", () => {
   });
 
   test("merge lifecycle", () => {
-    const fn1 = fn();
-    const fn2 = fn();
-    const fn3 = fn();
+    const fn1 = vi.fn();
+    const fn2 = vi.fn();
+    const fn3 = vi.fn();
 
     const mixins = [
       {

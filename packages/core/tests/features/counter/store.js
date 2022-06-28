@@ -1,4 +1,4 @@
-const { observable, action } = require("../../../dist/index.cjs")
+const { observable, action } = require("mobx-miniprogram")
 
 const record = observable({
   list: [],

@@ -1,4 +1,4 @@
-import { test, expect, describe, fn } from "vitest";
+import { test, expect, describe, vi } from "vitest";
 import {
   mergeDataOptions,
   mergeMethodOptions,
@@ -57,9 +57,9 @@ describe("use mergeDataOptions", () => {
 
 describe("use mergeMethodOptions", () => {
   test("same as mergeDataOptions", () => {
-    const fn1 = fn(() => 1);
-    const fn2 = fn(() => 2);
-    const fn3 = fn(() => 3);
+    const fn1 = vi.fn(() => 1);
+    const fn2 = vi.fn(() => 2);
+    const fn3 = vi.fn(() => 3);
     const obj1 = {
       fun1: fn1,
       fun2: fn2,
@@ -81,9 +81,9 @@ describe("use mergeMethodOptions", () => {
   });
 
   test("should ignore lifecycle methods", () => {
-    const fn1 = fn(() => 1);
-    const fn2 = fn(() => 2);
-    const fn3 = fn(() => 3);
+    const fn1 = vi.fn(() => 1);
+    const fn2 = vi.fn(() => 2);
+    const fn3 = vi.fn(() => 3);
     const obj1 = {
       fun1: fn1,
       onLoad: fn2,
@@ -105,10 +105,10 @@ describe("use mergeMethodOptions", () => {
 
 describe("use mergeLifecycleOptions", () => {
   test("mergeMethodsToArray should merge functions of the same name into an array", () => {
-    const fn1 = fn(() => 1);
-    const fn2 = fn(() => 2);
-    const fn3 = fn(() => 3);
-    const fn4 = fn(() => 4);
+    const fn1 = vi.fn(() => 1);
+    const fn2 = vi.fn(() => 2);
+    const fn3 = vi.fn(() => 3);
+    const fn4 = vi.fn(() => 4);
 
     const obj1 = {
       fn1,
@@ -134,9 +134,9 @@ describe("use mergeLifecycleOptions", () => {
   });
 
   describe("use mergeLifecycleOptions", () => {
-    const fn1 = fn(() => 1);
-    const fn2 = fn(() => 2);
-    const fn3 = fn(() => 3);
+    const fn1 = vi.fn(() => 1);
+    const fn2 = vi.fn(() => 2);
+    const fn3 = vi.fn(() => 3);
     const obj1 = {
       fun1: fn1,
       onLoad: fn2,
