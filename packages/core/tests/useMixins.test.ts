@@ -1,5 +1,5 @@
 import { test, expect, describe, vi } from "vitest";
-import { useMixins } from "./../src/mixin/useMixin";
+import { useMixins } from "../src/mixin/useMixins";
 
 describe("useMixins", () => {
   test("merge data", () => {
