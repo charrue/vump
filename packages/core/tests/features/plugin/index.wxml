@@ -1,0 +1,3 @@
+<view>
+  <view id="count">{{ count }}</view>
+</view>

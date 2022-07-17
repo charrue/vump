@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
-import { useMixins } from "./mixin/useMixin";
+import { useMixins } from "./mixin/useMixins";
 import { VumpFactory } from "./types/vump";
-import ComputedBehavior from "miniprogram-computed";
-import { diffBehavior } from "./behaviors/diff";
 import { PAGE_LIFETIMES } from "./helper/lifecycle";
+import { getPlugins } from "./behaviors/useGlobalPlugin";
 
 const defaultOptions: {
   data: VumpFactory.DefaultDataOption;
@@ -46,11 +45,9 @@ const createFactory = <T extends "component" | "page">(type: T) => {
       options.options = {};
     }
 
-    if (options.computed) {
-      // computed 功能注册
-      options.behaviors.push(ComputedBehavior.behavior);
-    }
-    options.behaviors.push(diffBehavior);
+    const plugins = getPlugins();
+
+    useMixins(options as any, plugins);
 
     // 合并options
     if (opt.mixins) {

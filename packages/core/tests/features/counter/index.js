@@ -1,4 +1,4 @@
-const { createComponent } = require("../../../dist/index.cjs.js");
+const { createComponent } = require("../../../dist/index.js");
 
 createComponent({
   data: {

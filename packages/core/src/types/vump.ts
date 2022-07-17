@@ -1,6 +1,58 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/indent */
-// eslint-disable-next-line @typescript-eslint/no-namespace
+
+interface WechatMiniprogramComponentLifetimes {
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 在组件实例刚刚被创建时执行
+   *
+   * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  created(): void;
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 在组件实例进入页面节点树时执行
+   *
+   * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  attached(): void;
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 在组件在视图层布局完成后执行
+   *
+   * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  ready(): void;
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 在组件实例被移动到节点树另一个位置时执行
+   *
+   * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  moved(): void;
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 在组件实例被从页面节点树移除时执行
+   *
+   * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  detached(): void;
+  /**
+   * 在vump中使用时会被指定到`lifetimes`中
+   *
+   * 每当组件方法抛出错误时执行
+   *
+   * 最低基础库版本：[`2.4.1`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
+   */
+  error(err: Error): void;
+}
+
 export namespace VumpFactory {
   export type DefaultDataOption = WechatMiniprogram.Component.DataOption;
   export type DefaultPropertyOption = WechatMiniprogram.Component.PropertyOption;
@@ -81,13 +133,14 @@ export namespace VumpFactory {
     TCustomInstanceProperty;
 
   export type ComponentOptions<
-    TData extends DefaultDataOption,
-    TProperty extends DefaultPropertyOption,
-    TMethod extends DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption<TData>>,
-    TWatch extends Partial<DefaultWatchOption>,
+    TData extends DefaultDataOption = DefaultDataOption,
+    TProperty extends DefaultPropertyOption = DefaultPropertyOption,
+    TMethod extends DefaultMethodOption = DefaultMethodOption,
+    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
+    TOptions extends CustomOption = CustomOption,
   > = Partial<VumpFactory.Data<TData>> & // data
     Partial<VumpFactory.Property<TProperty>> & // property
     Partial<VumpFactory.Method<TMethod, TIsPage>> & // methods
@@ -95,17 +148,38 @@ export namespace VumpFactory {
     Partial<VumpFactory.Watch<TWatch>> & // watch
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
-    Partial<WechatMiniprogram.Component.Lifetimes> &
+    Partial<
+      WechatMiniprogramComponentLifetimes & WechatMiniprogram.Component.Lifetimes["lifetimes"]
+    > &
     ThisType<
       ComponentInstance<TData, TProperty, TMethod, TComputed, TCustomInstanceProperty, TIsPage>
     > &
-    CustomOption;
+    TOptions;
+
+  export type Plugin<
+    TData extends DefaultDataOption = DefaultDataOption,
+    TProperty extends DefaultPropertyOption = DefaultPropertyOption,
+    TMethod extends DefaultMethodOption = DefaultMethodOption,
+    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
+    TCustomInstanceProperty extends IAnyObject = IAnyObject,
+    TOptions extends CustomOption = CustomOption,
+  > = ComponentOptions<
+    TData,
+    TProperty,
+    TMethod,
+    TComputed,
+    TWatch,
+    TCustomInstanceProperty,
+    false,
+    TOptions & { order?: number }
+  >;
 
   export type PageOptions<
-    TData extends DefaultDataOption,
-    TMethod extends DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption<TData>>,
-    TWatch extends Partial<DefaultWatchOption>,
+    TData extends DefaultDataOption = DefaultDataOption,
+    TMethod extends DefaultMethodOption = DefaultMethodOption,
+    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
   > = Partial<VumpFactory.Data<TData>> & // data
     Partial<VumpFactory.Method<TMethod, true>> & // methods
