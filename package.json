@@ -14,7 +14,8 @@
     "build": "pnpm run build --filter=@charrue/vump",
     "lint": "pnpm run lint --filter=@charrue/vump",
     "prepare": "husky install",
-    "test": "pnpm run test --filter=@charrue/vump"
+    "test": "pnpm run test --filter=@charrue/vump",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "lint-staged": {
     "!(*.d).ts": "npm run lint"
