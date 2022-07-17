@@ -1,5 +1,4 @@
 const { createComponent } = require("../../../dist/index.cjs.js");
-const { record } = require("./store")
 
 createComponent({
   data: {
@@ -20,19 +19,12 @@ createComponent({
       })
     },
   },
-  storeBindings: {
-    store: record,
-    fields: ["list"],
-    actions: ["updateList", "resetList"],
-  },
   methods: {
     onIncrease() {
       const newCount = this.data.count + 1;
       this.setData({
         count: newCount,
       });
-
-      this.updateList(newCount)
     },
     onDecrease() {
       const newCount = this.data.count - 1;
@@ -40,11 +32,6 @@ createComponent({
       this.setData({
         count: newCount,
       });
-
-      this.updateList(newCount)
     },
   },
-  attached() {
-    this.resetList()
-  }
 });

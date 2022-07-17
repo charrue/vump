@@ -41,20 +41,4 @@ describe("createComponent", () => {
     expect(comp.data.sign).toBe("-");
     expect(comp.data.nextCount).toBe(0);
   });
-
-  test("use option: storeBindings", async () => {
-    const comp = helper.renderComponent("counter/index");
-    const increaseDom = comp.querySelector("#increase")!;
-    const decreaseDom = comp.querySelector("#decrease")!;
-
-    increaseDom.dispatchEvent("tap");
-    await helper.sleep(300);
-
-    decreaseDom.dispatchEvent("tap");
-    decreaseDom.dispatchEvent("tap");
-    await helper.sleep(300);
-
-    console.log(comp.data.list);
-    expect(comp.data.list).toEqual([1, 0, -1]);
-  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@charrue/vump",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "🚴类Vue语法的微信小程序轻量级工具库, 基于原生开发标准",
   "keywords": [
     "typescript",
@@ -22,9 +22,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "miniprogram-computed": "^4.3.8",
-    "mobx-miniprogram": "^4.13.2",
-    "mobx-miniprogram-bindings": "^2.1.5"
+    "miniprogram-computed": "^4.3.8"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",

@@ -2,7 +2,6 @@
 import { useMixins } from "./mixin/useMixin";
 import { VumpFactory } from "./types/vump";
 import ComputedBehavior from "miniprogram-computed";
-import MobxBehavior from "mobx-miniprogram-bindings";
 import { diffBehavior } from "./behaviors/diff";
 import { PAGE_LIFETIMES } from "./helper/lifecycle";
 
@@ -45,9 +44,6 @@ const createFactory = <T extends "component" | "page">(type: T) => {
       options.options = {};
     }
 
-    if (options.storeBindings) {
-      options.behaviors.push(MobxBehavior.storeBindingsBehavior);
-    }
     if (options.computed) {
       // computed 功能注册
       options.behaviors.push(ComputedBehavior.behavior);
