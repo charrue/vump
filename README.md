@@ -10,20 +10,27 @@
 - [x] 基于原生开发(利用`Component`)
 - [x] 数据响应增强(computed、watch)
 - [x] 逻辑复用(mixins)
-- [x] 状态管理(Mobx)
+- [ ] ~~状态管理(Mobx)~~**(0.1.5可用，0.2.0开始弃用，如要使用可利用插件功能自行配置)**
 - [x] TypeScript支持
 - [x] 基于[wxstore](https://github.com/Tencent/westore)的data diff
+- [x] 插件功能
+
 
 
 ### 下载
+
 ``` bash
-npm install mobx-miniprogram @charrue/vump
+npm install @charrue/vump
 ```
 
-## 基础使用
+
+
+## 使用
+
+### 基础使用
 ``` javascript
+// counter.js
 import { createComponent } from "@charrue/vump";
-import store from "./store"
 import mixin from "./mixin"
 
 createComponent({
@@ -46,11 +53,6 @@ createComponent({
       })
     },
   },
-  storeBindings: {
-    store: store,
-    fields: ["list"],
-    actions: ["updateList", "resetList"],
-  },
   methods: {
     onIncrease() {
       const newCount = this.data.count + 1;
@@ -58,7 +60,6 @@ createComponent({
         count: newCount,
       });
 
-      this.updateList(newCount)
     },
     onDecrease() {
       const newCount = this.data.count - 1;
@@ -66,32 +67,10 @@ createComponent({
       this.setData({
         count: newCount,
       });
-
-      this.updateList(newCount)
     },
   },
 });
 
-```
-
-
-``` javascript
-// store.js
-import { observable } from "@charrue/vump";
-
-const store = observable({
-  list: [],
-
-  updateList: action(function (num) {
-    this.list = [...this.list, num]
-  }),
-
-  resetList: action(function (num) {
-    this.list = []
-  })
-})
-
-export default store
 ```
 
 ``` javascript
@@ -101,4 +80,55 @@ export default {
     this.resetList()
   }
 }
+```
+
+
+
+### 插件使用
+
+```
+npm install --save mobx-miniprogram mobx-miniprogram-bindings
+```
+
+``` javascript
+// app.js
+import { usePlugin } from "@charrue/vump";
+import { storeBindingsBehavior } from "mobx-miniprogram-bindings";
+
+usePlugin({
+  behaviors: [storeBindingsBehavior],
+})
+
+App({})
+```
+
+
+``` javascript
+// counter.js
+import { createComponent } from "@charrue/vump";
+
+import { store } from "./store";
+
+createComponent({
+  data: {
+    someData: "...",
+  },
+  storeBindings: {
+    store,
+    fields: {
+      numA: () => store.numA,
+      numB: (store) => store.numB,
+      sum: "sum",
+    },
+    actions: {
+      buttonTap: "update",
+    },
+  },
+  methods: {
+    myMethod() {
+      this.data.sum; // 来自于 MobX store 的字段
+    },
+  },
+});
+
 ```
