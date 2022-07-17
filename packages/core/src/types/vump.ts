@@ -12,6 +12,7 @@ export namespace VumpFactory {
     [k: string]: (data: T) => any;
   }
   export type IAnyObject = WechatMiniprogram.IAnyObject;
+  export type CustomOption = WechatMiniprogram.IAnyObject;
   export interface VumpInnerMethods {
     diffUpdate(data: Record<string, any>): void;
   }
@@ -97,7 +98,8 @@ export namespace VumpFactory {
     Partial<WechatMiniprogram.Component.Lifetimes> &
     ThisType<
       ComponentInstance<TData, TProperty, TMethod, TComputed, TCustomInstanceProperty, TIsPage>
-    >;
+    > &
+    CustomOption;
 
   export type PageOptions<
     TData extends DefaultDataOption,
@@ -112,7 +114,8 @@ export namespace VumpFactory {
     Partial<VumpFactory.Mixin> & // mixins
     Partial<VumpFactory.OtherOption> &
     Partial<WechatMiniprogram.Page.ILifetime> &
-    ThisType<PageInstance<TData, TMethod, TComputed, TCustomInstanceProperty>>;
+    ThisType<PageInstance<TData, TMethod, TComputed, TCustomInstanceProperty>> &
+    CustomOption;
 
   export interface Constructor {
     <
