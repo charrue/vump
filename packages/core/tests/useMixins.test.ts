@@ -142,4 +142,23 @@ describe("useMixins", () => {
     options.onHide();
     expect(fn3).toBeCalledTimes(1);
   });
+
+  test("merge custom options", () => {
+    const mixins = [
+      {
+        foo: {
+          bar: "baz",
+        },
+      },
+    ];
+    const options = {};
+
+    useMixins(options, mixins);
+
+    expect(options).toEqual({
+      foo: {
+        bar: "baz",
+      },
+    });
+  });
 });
