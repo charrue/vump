@@ -53,8 +53,6 @@ importers:
       miniprogram-computed: ^4.3.8
       miniprogram-exparser: ^2.15.0
       miniprogram-simulate: ^1.5.7
-      mobx-miniprogram: ^4.13.2
-      mobx-miniprogram-bindings: ^2.1.5
       rimraf: ^3.0.2
       rollup: ^2.60.2
       rollup-plugin-dts: ^4.0.1
@@ -62,8 +60,6 @@ importers:
       ts-toolbelt: 6.15.1
     dependencies:
       miniprogram-computed: 4.3.8
-      mobx-miniprogram: 4.13.2
-      mobx-miniprogram-bindings: 2.1.5_mobx-miniprogram@4.13.2
     devDependencies:
       '@rollup/plugin-commonjs': 21.1.0_rollup@2.70.2
       '@rollup/plugin-node-resolve': 13.2.1_rollup@2.70.2
@@ -526,10 +522,6 @@ packages:
     dependencies:
       '@types/node': 17.0.29
     dev: true
-
-  /@types/wechat-miniprogram/3.4.1:
-    resolution: {integrity: sha512-szbuYR32VotxNQNQ4YyQ6Ob3ya0tLY0zpf/xvi6DF8Oqb+0Y+5CL5BpxS+4wBSJvlu3VfSXhjxZ0ze1a3l16Pw==}
-    dev: false
 
   /@typescript-eslint/eslint-plugin/5.21.0_829e74f28e9c9eb05edda582d47d45b8:
     resolution: {integrity: sha512-fTU85q8v5ZLpoZEyn/u1S2qrFOhi33Edo2CZ0+q1gDaWWm0JuPh3bgOyU8lM0edIEYgKLDkPFiZX2MOupgjlyg==}
@@ -2704,19 +2696,6 @@ packages:
       miniprogram-compiler: 0.2.1
       postcss: 7.0.39
     dev: true
-
-  /mobx-miniprogram-bindings/2.1.5_mobx-miniprogram@4.13.2:
-    resolution: {integrity: sha512-2HuiQL5FPgoYJ8XIMdw5iD6XT61LtsujaGyizbN845iZcsLmrKZiF0dKd4jQTSuC/6rGozqqhcy0sDc7qcpjYQ==}
-    peerDependencies:
-      mobx-miniprogram: ^4.0.0
-    dependencies:
-      '@types/wechat-miniprogram': 3.4.1
-      mobx-miniprogram: 4.13.2
-    dev: false
-
-  /mobx-miniprogram/4.13.2:
-    resolution: {integrity: sha512-C3HtkqHCLKp35N2gXA80yFD6PNfSqwioPFmnjTQpBLrEqYm1F6yiWZ57CW+8FqgmR306mw6ZfsM5q7hSTHw8BQ==}
-    dev: false
 
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}

@@ -1,3 +1,19 @@
+import { usePlugin } from "@charrue/vump";
+
+usePlugin({
+  behaviors: [
+    Behavior({
+      lifetimes: {
+        attached() {
+          this.setData({
+            dataFromPlugin: "dataFromPlugin",
+          });
+        },
+      },
+    }),
+  ],
+});
+
 // app.ts
 App<IAppOption>({
   globalData: {},
