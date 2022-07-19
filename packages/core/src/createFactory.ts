@@ -17,14 +17,12 @@ const createFactory = <T extends "component" | "page">(type: T) => {
     TData extends VumpFactory.DefaultDataOption = VumpFactory.DefaultDataOption,
     TProperty extends VumpFactory.DefaultPropertyOption = VumpFactory.DefaultPropertyOption,
     TMethod extends VumpFactory.DefaultMethodOption = VumpFactory.DefaultMethodOption,
-    TComputed extends Partial<VumpFactory.DefaultComputedOption<TData>> = Partial<
-      VumpFactory.DefaultComputedOption<TData>
-    >,
+    TComputed extends VumpFactory.ComponentComputedOption<TData, TProperty> = VumpFactory.ComponentComputedOption<TData, TProperty>,
     TWatch extends Partial<VumpFactory.DefaultWatchOption> = Partial<VumpFactory.DefaultWatchOption>,
     TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.VumpInnerMethods,
   >(
     opt: T extends "page"
-      ? VumpFactory.PageOptions<TData, TMethod, TComputed, TWatch, TCustomInstanceProperty>
+      ? VumpFactory.PageOptions<TData, TMethod, VumpFactory.PageComputedOption<TData>, TWatch, TCustomInstanceProperty>
       : VumpFactory.ComponentOptions<
           TData,
           TProperty,
@@ -62,7 +60,7 @@ const createFactory = <T extends "component" | "page">(type: T) => {
           options as VumpFactory.PageOptions<
             TData,
             TMethod,
-            TComputed,
+            VumpFactory.PageComputedOption<TData>,
             TWatch,
             TCustomInstanceProperty
           >
@@ -78,7 +76,7 @@ const createFactory = <T extends "component" | "page">(type: T) => {
             options as VumpFactory.PageOptions<
               TData,
               TMethod,
-              TComputed,
+              VumpFactory.PageComputedOption<TData>,
               TWatch,
               TCustomInstanceProperty
             >

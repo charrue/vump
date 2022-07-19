@@ -60,7 +60,7 @@ export namespace VumpFactory {
   export interface DefaultWatchOption {
     [k: string]: (...args: any[]) => void;
   }
-  export interface DefaultComputedOption<T> {
+  export interface DefaultComponentComputedOption<T> {
     [k: string]: (data: T) => any;
   }
   export type IAnyObject = WechatMiniprogram.IAnyObject;
@@ -86,6 +86,19 @@ export namespace VumpFactory {
     /** 组件的计算属性 */
     computed?: C;
   }
+  export type PageComputedOption<TData> = Record<string, (data: TData) => any>
+  export type ComponentComputedOption<TData, TProperty = Record<string, any>> = Record<string, (data: TData & { [K in keyof TProperty]: any }) => any>
+
+  export type ComputedInstance<
+    D extends WechatMiniprogram.Component.DataOption,
+    P extends WechatMiniprogram.Component.PropertyOption,
+    M extends WechatMiniprogram.Component.MethodOption,
+    C extends Record<string, (data: D & { [K in keyof P]: any }) => any>,
+    TCustomProperty extends WechatMiniprogram.IAnyObject = Record<string, never>,
+  > = WechatMiniprogram.Component.Instance<D, P, M, TCustomProperty> & {
+    data: { [K in keyof C]: ReturnType<C[K]> } & { [K in keyof P]: any };
+  }
+
   export interface Watch<D extends Partial<DefaultWatchOption>> {
     /** 组件的监听属性，会在属性值发生变化时进行调用 */
     watch?: D;
@@ -104,7 +117,7 @@ export namespace VumpFactory {
     TData extends DefaultDataOption,
     TProperty extends DefaultPropertyOption,
     TMethod extends Partial<DefaultMethodOption>,
-    TComputed extends Partial<DefaultComputedOption<TData & { [K in keyof TProperty]: any }>>,
+    TComputed extends ComponentComputedOption<TData, TProperty>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
   > = WechatMiniprogram.Component.InstanceProperties &
@@ -112,7 +125,7 @@ export namespace VumpFactory {
     TMethod &
     TCustomInstanceProperty & {
       /** 组件数据，**包括内部数据和属性值** */
-      data: TData & TComputed & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
+      data: TData & { [K in keyof TComputed]: ReturnType<TComputed[K]> } & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
       /** 组件数据，**包括内部数据和属性值**（与 `data` 一致） */
       properties: TData & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
     } & (TIsPage extends true ? WechatMiniprogram.Page.ILifetime : IAnyObject);
@@ -120,7 +133,7 @@ export namespace VumpFactory {
   export type PageInstance<
     TData extends DefaultDataOption,
     TMethod extends Partial<DefaultMethodOption>,
-    TComputed extends Partial<DefaultComputedOption<TData>>,
+    TComputed extends Partial<DefaultComponentComputedOption<TData>>,
     TWatch extends Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
   > = WechatMiniprogram.Component.InstanceProperties &
@@ -136,7 +149,7 @@ export namespace VumpFactory {
     TData extends DefaultDataOption = DefaultDataOption,
     TProperty extends DefaultPropertyOption = DefaultPropertyOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<TData, TProperty>,
     TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
@@ -160,7 +173,7 @@ export namespace VumpFactory {
     TData extends DefaultDataOption = DefaultDataOption,
     TProperty extends DefaultPropertyOption = DefaultPropertyOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<TData, TProperty>,
     TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TOptions extends CustomOption = CustomOption,
@@ -178,7 +191,7 @@ export namespace VumpFactory {
   export type PageOptions<
     TData extends DefaultDataOption = DefaultDataOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
-    TComputed extends Partial<DefaultComputedOption<TData>> = Partial<DefaultComputedOption<TData>>,
+    TComputed extends ComponentComputedOption<TData> = ComponentComputedOption<TData>,
     TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
   > = Partial<VumpFactory.Data<TData>> & // data
@@ -196,7 +209,7 @@ export namespace VumpFactory {
       TData extends DefaultDataOption,
       TProperty extends DefaultPropertyOption,
       TMethod extends DefaultMethodOption,
-      TComputed extends Partial<DefaultComputedOption<TData>>,
+      TComputed extends Record<string, (data: TData) => any>,
       TWatch extends Partial<DefaultWatchOption>,
       TCustomInstanceProperty extends IAnyObject = IAnyObject,
       TIsPage extends boolean = false,
