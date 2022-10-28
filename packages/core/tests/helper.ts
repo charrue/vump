@@ -1,10 +1,11 @@
 import simulate from "miniprogram-simulate";
 import exparser from "miniprogram-exparser";
 import { resolve } from "path";
+import { vumpDefaultBehavior } from "../src/componentOptions";
 
 const originLoad = simulate.load;
 
-export default {
+const helper = {
   ...simulate,
   exparser,
 
@@ -22,3 +23,22 @@ export default {
     return comp;
   },
 };
+
+export const createComponent = (options: Record<string, any> = {}) => {
+  const componentId = helper.load({
+    template: "<view></view>",
+    behaviors: [vumpDefaultBehavior],
+    ...options,
+  });
+
+  const component = helper.render(componentId);
+  const parent = document.createElement("parent-wrapper");
+  component.attach(parent);
+
+  return {
+    component,
+    instance: component.instance as any,
+  };
+};
+
+export default helper;
