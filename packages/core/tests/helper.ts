@@ -2,6 +2,7 @@ import simulate from "miniprogram-simulate";
 import exparser from "miniprogram-exparser";
 import { resolve } from "path";
 import { vumpDefaultBehavior } from "../src/componentOptions";
+import { vi } from "vitest";
 
 const originLoad = simulate.load;
 
@@ -25,6 +26,7 @@ const helper = {
 };
 
 export const createComponent = (options: Record<string, any> = {}) => {
+  const setDataSpy = vi.fn();
   const componentId = helper.load({
     template: "<view></view>",
     behaviors: [vumpDefaultBehavior],
@@ -32,12 +34,19 @@ export const createComponent = (options: Record<string, any> = {}) => {
   });
 
   const component = helper.render(componentId);
+  const originInstanceSetData = component.instance.setData;
+  component.instance.setData = function (data: any) {
+    setDataSpy(data);
+    originInstanceSetData(data);
+  };
+
   const parent = document.createElement("parent-wrapper");
   component.attach(parent);
 
   return {
     component,
     instance: component.instance as any,
+    setDataSpy,
   };
 };
 

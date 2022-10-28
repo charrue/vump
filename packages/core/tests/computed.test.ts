@@ -2,6 +2,7 @@ import { proxyRefs } from "@vue/reactivity";
 import { describe, expect, test, vi } from "vitest";
 import { COMPUTED_KEY } from "../src/instance";
 import { createComponent } from "./helper";
+import { nextTick } from "../src/scheduler";
 
 describe("computed option", () => {
   test("basic usage", () => {
@@ -31,23 +32,21 @@ describe("computed option", () => {
   });
 
   test("with setter", () => {
-    const component = createComponent({
+    const { instance } = createComponent({
       data: {
         a: 1,
       },
       computed: {
         b: {
-          get() {
+          get(this: any) {
             return this.a + 1;
           },
-          set(v) {
+          set(this: any, v: number) {
             this.a = v - 1;
           },
         },
       },
     });
-
-    const { instance } = component.instance as any;
 
     expect(instance.b).toBe(2);
     instance.a = 2;
@@ -63,7 +62,7 @@ describe("computed option", () => {
       },
       computed: {
         b: {
-          set(v) {
+          set(this: any, v: number) {
             this.a = v;
           },
         },
@@ -106,7 +105,9 @@ describe("computed option", () => {
       },
     });
 
-    expect(spy).toBeCalledTimes(0);
+    // 与vue不同，computed至少会被执行一次
+    // 在组件attached阶段将computed的值setData
+    expect(spy).toBeCalledTimes(1);
 
     expect(instance.b).toBe(2);
     expect(spy).toBeCalledTimes(1);
@@ -114,6 +115,31 @@ describe("computed option", () => {
     expect(instance.b).toBe(2);
     expect(spy).toBeCalledTimes(1);
   });
+
+  test("should call setData", async () => {
+    const { instance, setDataSpy, component } = createComponent({
+      template: "<view>{{ a }} {{ b }}</view>",
+      data: {
+        a: 1,
+      },
+      computed: {
+        b() {
+          return this.a + 1;
+        },
+      },
+    });
+    expect(setDataSpy).toHaveBeenCalledTimes(1);
+    expect(setDataSpy).toHaveBeenCalledWith({ a: 1, b: 2 });
+    expect(component.dom?.innerHTML).toBe("<wx-view>1 2</wx-view>");
+
+    instance.a = 2;
+    expect(component.dom?.innerHTML).toBe("<wx-view>1 2</wx-view>");
+    await nextTick();
+    expect(setDataSpy).toHaveBeenCalledTimes(2);
+    expect(setDataSpy).toHaveBeenCalledWith({ a: 2, b: 3 });
+    expect(component.dom?.innerHTML).toBe("<wx-view>2 3</wx-view>");
+  });
+
   // warn conflict with data
   // warn conflict with props
   // warn conflict with methods

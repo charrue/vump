@@ -4,6 +4,7 @@ import {
   computed,
   ComputedGetter,
   ComputedSetter,
+  effect,
   effectScope,
   reactive,
   WritableComputedRef,
@@ -12,6 +13,8 @@ import { watch } from "@vue-reactivity/watch";
 import { isFn, isObj, isPlainObj, isStr, warn } from "./helper/utils";
 import { ComponentInternalInstance, COMPUTED_KEY, DATA_KEY } from "./instance";
 import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
+import { queueJob } from "./scheduler";
+import { traverse } from "./traverse";
 
 const initData = (instance: ComponentInternalInstance, dataOption: ComponentOptions["data"]) => {
   if (!dataOption) {
@@ -167,9 +170,27 @@ const createComponentLifetimes = () => {
   }
   function attached(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
-
     context.isAttached = true;
+
+    const fn = effect(
+      () => {
+        // TODO: diff
+        const updateValue = traverse(context[DATA_KEY]) as Record<string, any>;
+        // 此处相较Vue不同的是
+        // Vue中的computed是在访问的时候才会运算一次
+        // 这里computed至少会执行一次
+        if (context[COMPUTED_KEY]) {
+          Object.assign(updateValue, context[COMPUTED_KEY]);
+        }
+
+        context.setData(updateValue);
+      },
+      {
+        scheduler: () => queueJob(fn),
+      },
+    ) as () => void;
   }
+
   function detached(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
 

@@ -4,6 +4,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-empty-function": "off",
     "no-param-reassign": "off",
+    "func-style": "off",
     "consistent-return": "off"
   }
 }

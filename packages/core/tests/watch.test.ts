@@ -1,4 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
+import { nextTick } from "../src/scheduler";
 import { createComponent } from "./helper";
 
 describe("watch option", () => {
@@ -89,5 +90,30 @@ describe("watch option", () => {
     expect(fn).not.toHaveBeenCalled();
     instance.a.b = 2;
     expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  test("should call setData", async () => {
+    const { instance, setDataSpy, component } = createComponent({
+      template: "<view>{{ a }} {{ b }}</view>",
+      data: {
+        a: 1,
+        b: 1,
+      },
+      watch: {
+        a(val: number) {
+          this.b = val;
+        },
+      },
+    });
+    expect(setDataSpy).toHaveBeenCalledTimes(1);
+    expect(setDataSpy).toHaveBeenCalledWith({ a: 1, b: 1 });
+    expect(component.dom?.innerHTML).toBe("<wx-view>1 1</wx-view>");
+
+    instance.a = 2;
+    expect(component.dom?.innerHTML).toBe("<wx-view>1 1</wx-view>");
+    await nextTick();
+    expect(setDataSpy).toHaveBeenCalledTimes(2);
+    expect(setDataSpy).toHaveBeenCalledWith({ a: 2, b: 2 });
+    expect(component.dom?.innerHTML).toBe("<wx-view>2 2</wx-view>");
   });
 });
