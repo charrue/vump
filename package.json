@@ -11,8 +11,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "pnpm run build --filter=@charrue/vump",
-    "lint": "pnpm run lint --filter=@charrue/vump",
+    "build": "pnpm --filter=@charrue/vump run build",
+    "lint": "pnpm --filter=@charrue/vump run lint",
     "prepare": "husky install",
     "test": "pnpm --filter=@charrue/vump run test",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
