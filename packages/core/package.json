@@ -21,9 +21,6 @@
     "lint": "eslint --fix src/**/*.ts",
     "test": "vitest"
   },
-  "dependencies": {
-    "miniprogram-computed": "^4.3.8"
-  },
   "devDependencies": {
     "@vue-reactivity/watch": "^0.2.0",
     "@vue/reactivity": "3.2.41",

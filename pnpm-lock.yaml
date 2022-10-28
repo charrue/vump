@@ -51,13 +51,10 @@ importers:
       '@vue-reactivity/watch': ^0.2.0
       '@vue/reactivity': 3.2.41
       miniprogram-api-typings: ^3.4.6
-      miniprogram-computed: ^4.3.8
       miniprogram-exparser: ^2.15.0
       miniprogram-simulate: ^1.5.7
       ts-toolbelt: 6.15.1
       unbuild: ^0.9.4
-    dependencies:
-      miniprogram-computed: 4.3.8
     devDependencies:
       '@vue-reactivity/watch': 0.2.0_@vue+reactivity@3.2.41
       '@vue/reactivity': 3.2.41
@@ -2542,10 +2539,6 @@ packages:
       tmp: 0.0.33
     dev: true
 
-  /fast-deep-equal/2.0.1:
-    resolution: {integrity: sha512-bCK/2Z4zLidyB4ReuIsvALH6w31YfAQDmXMqMx6FyfHqvBxtjC0eRumeSu4Bs3XtXwpyIywtSTrVT99BxY1f9w==}
-    dev: false
-
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     dev: true
@@ -3518,13 +3511,6 @@ packages:
       unescape-js: 1.1.4
     dev: true
 
-  /miniprogram-computed/4.3.8:
-    resolution: {integrity: sha512-37MqgVPpU7Z2Iy9Y9vYlhDUDQw7ae5VWf+3NyURwEn2e7FOJUVop9JXysUWgA2SgPZawNizGHSghfMqYYJjG6g==}
-    dependencies:
-      fast-deep-equal: 2.0.1
-      rfdc: 1.3.0
-    dev: false
-
   /miniprogram-exparser/2.15.0:
     resolution: {integrity: sha512-W6aS1R3oVTwYw5hPguRqICFqx3wk2dtPAcwT6269WeWRjuQslbVPZRW/nlN16bg0NM5eQFmfU49PM6/PQ5DE8w==}
     dev: true
@@ -4027,6 +4013,7 @@ packages:
 
   /rfdc/1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
+    dev: true
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}

@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-import { diffBehavior } from "./diff";
-import ComputedBehavior from "miniprogram-computed";
 import { VumpFactory } from "./../types/vump";
 
 const createGlobalPluginFactory = () => {
@@ -25,7 +22,3 @@ const methods = createGlobalPluginFactory();
 export const { usePlugin } = methods;
 
 export const { getPlugins } = methods;
-
-usePlugin({
-  behaviors: [ComputedBehavior.behavior, diffBehavior],
-});
