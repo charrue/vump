@@ -1,3 +1,5 @@
+import "./polyfill/index";
+
 export * from "./is";
 export * from "./utils";
 export * from "./constants";
