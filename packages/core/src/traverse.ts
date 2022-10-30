@@ -1,5 +1,5 @@
 import { isRef } from "@vue/reactivity";
-import { isObj, isArr, isSet, isMap, isPlainObj } from "./helper/utils";
+import { isObj, isArr, isSet, isMap, isPlainObj } from "@vump/shared";
 
 enum ReactiveFlags {
   SKIP = "__v_skip",

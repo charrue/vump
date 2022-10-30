@@ -1,9 +1,10 @@
-import { VumpFactory } from "./../types/vump";
+import { VumpFactory } from "../types/vump";
+import { PLUGIN_KEY } from "@vump/shared";
 
 const createGlobalPluginFactory = () => {
   const plugins: VumpFactory.Plugin[] = [];
   if (wx) {
-    (wx as any).__charrue_vump_plugins__ = plugins;
+    (wx as any)[PLUGIN_KEY] = plugins;
   }
 
   return {
@@ -11,7 +12,7 @@ const createGlobalPluginFactory = () => {
       plugins.push(plugin);
     },
     getPlugins: () => {
-      const Plugins = ((wx as any).__charrue_vump_plugins__ as VumpFactory.Plugin[]) || plugins;
+      const Plugins = ((wx as any)[PLUGIN_KEY] as VumpFactory.Plugin[]) || plugins;
       return Plugins.sort((a, b) => (a.order || 0) - (b.order || 0));
     },
   };
