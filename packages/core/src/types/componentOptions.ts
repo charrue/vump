@@ -32,13 +32,13 @@ export interface MethodOptions {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type DefaultObject = Record<string, any>;
-export type ComponentOptions<
+export interface ComponentOptions<
   D extends Record<string, any> = DefaultObject,
   C extends ComputedOptions = DefaultObject,
   M extends MethodOptions = DefaultObject,
-> = {
+> {
   data?: DataOptions<D>;
   computed?: C;
   watch?: ComponentWatchOptions;
   methods?: M;
-};
+}

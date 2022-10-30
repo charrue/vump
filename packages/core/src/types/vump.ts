@@ -10,7 +10,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  created(): void;
+  created: () => void;
   /**
    * 在vump中使用时会被指定到`lifetimes`中
    *
@@ -18,7 +18,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  attached(): void;
+  attached: () => void;
   /**
    * 在vump中使用时会被指定到`lifetimes`中
    *
@@ -26,7 +26,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  ready(): void;
+  ready: () => void;
   /**
    * 在vump中使用时会被指定到`lifetimes`中
    *
@@ -34,7 +34,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  moved(): void;
+  moved: () => void;
   /**
    * 在vump中使用时会被指定到`lifetimes`中
    *
@@ -42,7 +42,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`1.6.3`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  detached(): void;
+  detached: () => void;
   /**
    * 在vump中使用时会被指定到`lifetimes`中
    *
@@ -50,7 +50,7 @@ interface WechatMiniprogramComponentLifetimes {
    *
    * 最低基础库版本：[`2.4.1`](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html)
    */
-  error(err: Error): void;
+  error: (err: Error) => void;
 }
 
 export namespace VumpFactory {
@@ -86,8 +86,11 @@ export namespace VumpFactory {
     /** 组件的计算属性 */
     computed?: C;
   }
-  export type PageComputedOption<TData> = Record<string, (data: TData) => any>
-  export type ComponentComputedOption<TData, TProperty = Record<string, any>> = Record<string, (data: TData & { [K in keyof TProperty]: any }) => any>
+  export type PageComputedOption<TData> = Record<string, (data: TData) => any>;
+  export type ComponentComputedOption<TData, TProperty = Record<string, any>> = Record<
+    string,
+    (data: TData & { [K in keyof TProperty]: any }) => any
+  >;
 
   export type ComputedInstance<
     D extends WechatMiniprogram.Component.DataOption,
@@ -97,19 +100,21 @@ export namespace VumpFactory {
     TCustomProperty extends WechatMiniprogram.IAnyObject = Record<string, never>,
   > = WechatMiniprogram.Component.Instance<D, P, M, TCustomProperty> & {
     data: { [K in keyof C]: ReturnType<C[K]> } & { [K in keyof P]: any };
-  }
+  };
 
   export interface Watch<D extends Partial<DefaultWatchOption>> {
     /** 组件的监听属性，会在属性值发生变化时进行调用 */
     watch?: D;
   }
 
-  export type Mixin = {
+  export interface Mixin {
     /** 组件的复用功能，现版本不支持mixins的嵌套  */
-    mixins?: (Data<DefaultDataOption> &
-      Partial<Property<DefaultPropertyOption>> &
-      Partial<Method<DefaultMethodOption>>)[];
-  };
+    mixins?: Array<
+      Data<DefaultDataOption> &
+        Partial<Property<DefaultPropertyOption>> &
+        Partial<Method<DefaultMethodOption>>
+    >;
+  }
 
   export type OtherOption = Omit<WechatMiniprogram.Component.OtherOption, "pageLifetimes">;
 
@@ -125,7 +130,9 @@ export namespace VumpFactory {
     TMethod &
     TCustomInstanceProperty & {
       /** 组件数据，**包括内部数据和属性值** */
-      data: TData & { [K in keyof TComputed]: ReturnType<TComputed[K]> } & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
+      data: TData & {
+        [K in keyof TComputed]: ReturnType<TComputed[K]>;
+      } & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
       /** 组件数据，**包括内部数据和属性值**（与 `data` 一致） */
       properties: TData & WechatMiniprogram.Component.PropertyOptionToData<TProperty>;
     } & (TIsPage extends true ? WechatMiniprogram.Page.ILifetime : IAnyObject);
@@ -149,7 +156,10 @@ export namespace VumpFactory {
     TData extends DefaultDataOption = DefaultDataOption,
     TProperty extends DefaultPropertyOption = DefaultPropertyOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
-    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<TData, TProperty>,
+    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<
+      TData,
+      TProperty
+    >,
     TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
@@ -173,7 +183,10 @@ export namespace VumpFactory {
     TData extends DefaultDataOption = DefaultDataOption,
     TProperty extends DefaultPropertyOption = DefaultPropertyOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
-    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<TData, TProperty>,
+    TComputed extends ComponentComputedOption<TData, TProperty> = ComponentComputedOption<
+      TData,
+      TProperty
+    >,
     TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TOptions extends CustomOption = CustomOption,

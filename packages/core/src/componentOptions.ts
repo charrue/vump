@@ -1,31 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable func-style */
 import {
   computed,
   ComputedGetter,
   ComputedSetter,
   effect,
   effectScope,
+  proxyRefs,
   reactive,
   WritableComputedRef,
 } from "@vue/reactivity";
 import { watch } from "@vue-reactivity/watch";
-import { isFn, isObj, isPlainObj, isStr, warn } from "./helper/utils";
+import { EMPTY_OBJ, isFn, isObj, isPlainObj, isStr, warn } from "./helper/utils";
 import { ComponentInternalInstance, COMPUTED_KEY, DATA_KEY } from "./instance";
 import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
 import { queueJob } from "./scheduler";
-import { traverse } from "./traverse";
+import { diffData } from "./diff/index";
 
 const initData = (instance: ComponentInternalInstance, dataOption: ComponentOptions["data"]) => {
+  // data默认是空对象
+  instance.data = EMPTY_OBJ;
+  instance[DATA_KEY] = reactive(EMPTY_OBJ);
   if (!dataOption) {
-    instance.data = {};
-    instance[DATA_KEY] = reactive({});
     return;
   }
+
   const data = isFn(dataOption) ? dataOption.call(instance, instance) : dataOption;
 
   if (isObj(data)) {
-    instance.data = data;
+    // instance.data = data;
     instance[DATA_KEY] = reactive(data);
     Object.keys(data).forEach((key) => {
       Object.defineProperty(instance, key, {
@@ -174,14 +175,14 @@ const createComponentLifetimes = () => {
 
     const fn = effect(
       () => {
-        // TODO: diff
-        const updateValue = traverse(context[DATA_KEY]) as Record<string, any>;
         // 此处相较Vue不同的是
         // Vue中的computed是在访问的时候才会运算一次
         // 这里computed至少会执行一次
-        if (context[COMPUTED_KEY]) {
-          Object.assign(updateValue, context[COMPUTED_KEY]);
-        }
+        const currentData = {
+          ...context[DATA_KEY],
+          ...proxyRefs(context[COMPUTED_KEY]),
+        };
+        const updateValue = diffData(currentData, context.data);
 
         context.setData(updateValue);
       },

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 
 import { T, O } from "ts-toolbelt";
+
 export const isArray = (obj: unknown): boolean => Array.isArray(obj);
 
 export const error = (msg: string): void => {
@@ -128,3 +129,5 @@ export const isPromise = (obj: any): obj is Promise<any> => !!obj && typeof obj.
 export const NOOP = () => {
   //
 };
+
+export const EMPTY_OBJ = {};

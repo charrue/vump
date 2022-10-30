@@ -3,13 +3,13 @@ const ns = "charrue";
 export const DATA_KEY = `__${ns}_data_key__` as const;
 export const COMPUTED_KEY = `__${ns}_computed_key__` as const;
 
-export type ComponentInternalInstance = {
+export interface ComponentInternalInstance {
   isCreated: boolean;
   isAttached: boolean;
   isDetached: boolean;
   [DATA_KEY]: Record<string, any>;
   [k: string]: any;
-};
+}
 
 export let currentInstance: ComponentInternalInstance | null = null;
 
