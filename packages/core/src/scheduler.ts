@@ -1,5 +1,5 @@
 let queued = false;
-const queue: ((...args: any[]) => any)[] = [];
+const queue: Array<(...args: any[]) => any> = [];
 const p = Promise.resolve();
 
 const flushJobs = () => {

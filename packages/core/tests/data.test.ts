@@ -46,7 +46,7 @@ describe("option data", () => {
       },
     });
     expect(setDataSpy).toHaveBeenCalledTimes(1);
-    expect(setDataSpy).toHaveBeenCalledWith({ a: 1 });
+    expect(setDataSpy).toHaveBeenCalledWith({});
     expect(component.dom?.innerHTML).toBe("<wx-view>1</wx-view>");
 
     instance.a = 2;

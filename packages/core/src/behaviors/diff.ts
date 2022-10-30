@@ -1,12 +1,12 @@
-import { diffData } from "./westore.js";
+import { diffData } from "../diff/index";
 
 type BehaviorData = Record<string, any>;
 type SetDataCallback = () => void;
-type BehaviorExtend = {
+interface BehaviorExtend {
   data: BehaviorData;
-  setData(data: BehaviorData, callback?: SetDataCallback): void;
-  diffUpdate(data: BehaviorData, callback?: SetDataCallback): void;
-};
+  setData: (data: BehaviorData, callback?: SetDataCallback) => void;
+  diffUpdate: (data: BehaviorData, callback?: SetDataCallback) => void;
+}
 
 export const diffBehavior = Behavior({
   methods: {

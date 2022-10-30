@@ -27,8 +27,6 @@ describe("computed option", () => {
     expect(proxyRefs(instance[COMPUTED_KEY])).toEqual({
       b: 3,
     });
-
-    // TODO: DOM上的渲染
   });
 
   test("with setter", () => {
@@ -69,7 +67,7 @@ describe("computed option", () => {
       },
     });
 
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
     instance.b;
 
     expect(`Computed property "b" has no getter.`).toHaveBeenWarned();
@@ -129,7 +127,7 @@ describe("computed option", () => {
       },
     });
     expect(setDataSpy).toHaveBeenCalledTimes(1);
-    expect(setDataSpy).toHaveBeenCalledWith({ a: 1, b: 2 });
+    expect(setDataSpy).toHaveBeenCalledWith({ b: 2 });
     expect(component.dom?.innerHTML).toBe("<wx-view>1 2</wx-view>");
 
     instance.a = 2;

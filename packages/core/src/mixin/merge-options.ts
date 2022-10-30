@@ -95,7 +95,7 @@ export const mergeLifecycleOptions = <P extends Record<string, any>, C extends R
   );
   const composedLifecycleCallbacks: Record<Keyof<typeof lifecycleCallbacks>, Fn> = {} as any;
 
-  (Object.keys(lifecycleCallbacks) as Keyof<typeof lifecycleCallbacks>[]).forEach(
+  (Object.keys(lifecycleCallbacks) as Array<Keyof<typeof lifecycleCallbacks>>).forEach(
     (lifecycleName) => {
       const callbacks = lifecycleCallbacks[lifecycleName];
       if (!Array.isArray(callbacks) || callbacks.length === 0) return;
