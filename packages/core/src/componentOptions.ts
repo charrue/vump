@@ -7,6 +7,7 @@ import {
   proxyRefs,
   reactive,
   WritableComputedRef,
+  toRaw,
 } from "@vue/reactivity";
 import { watch } from "@vue-reactivity/watch";
 import {
@@ -182,6 +183,7 @@ const createComponentLifetimes = () => {
     const context = this as unknown as ComponentInternalInstance;
     context.isAttached = true;
 
+    // TODO: 热更新时，context中 DATA_KEY、COMPUTED_KEY 将会是 undefined
     const fn = effect(
       () => {
         // 此处相较Vue不同的是
@@ -193,7 +195,7 @@ const createComponentLifetimes = () => {
         };
         const updateValue = diffData(currentData, context.data);
 
-        context.setData(updateValue);
+        context.setData(toRaw(updateValue));
       },
       {
         scheduler: () => queueJob(fn),

@@ -1,4 +1,4 @@
-import { globalVariable } from "./globalThis";
+import { getGlobalThis } from "./globalThis";
 
-export const NativeProxy = globalVariable.Proxy;
+export const NativeProxy = getGlobalThis().Proxy;
 export const supportNativeProxy = NativeProxy && /native code/.test(NativeProxy.toString());

@@ -1,3 +1,5 @@
+import { isFn } from "@vump/shared";
+
 let queued = false;
 const queue: Array<(...args: any[]) => any> = [];
 const p = Promise.resolve();
@@ -19,7 +21,7 @@ export const nextTick = (fn?: () => void) => {
 };
 
 export const queueJob = (job: (...args: any[]) => any) => {
-  if (!queue.includes(job)) {
+  if (!queue.includes(job) && isFn(job)) {
     queue.push(job);
   }
 
