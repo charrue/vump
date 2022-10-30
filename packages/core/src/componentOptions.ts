@@ -26,9 +26,9 @@ import { diffData } from "./diff/index";
 
 const initData = (instance: ComponentInternalInstance, dataOption: ComponentOptions["data"]) => {
   // data默认是空对象
-  instance.data = EMPTY_OBJ;
   instance[DATA_KEY] = reactive(EMPTY_OBJ);
   if (!dataOption) {
+    instance.data = EMPTY_OBJ;
     return;
   }
 
