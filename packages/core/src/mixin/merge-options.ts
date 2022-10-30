@@ -1,5 +1,5 @@
 import { mergeLeft, omit, pick } from "@vump/shared";
-import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../lifecycle";
+import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../lifecycle/index";
 import type { PlainObject, Keyof, Fn } from "../types/utils";
 
 const LIFECYCLE_HOOKS = [...PAGE_LIFETIMES, ...COMPONENT_LIFETIMES] as const;
