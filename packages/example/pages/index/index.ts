@@ -1,34 +1,41 @@
 import { createPage } from "@charrue/vump";
-import doLogin from "../../mixins/load-mixin";
-import store from "./store";
+import Api from "../../utils/api.js";
 
 createPage({
-  mixins: [doLogin],
   data: {
-    motto: "Hello World",
-  },
-  storeBindings: {
-    store,
-    fields: {
-      count: () => store.count,
-    },
-    actions: {
-      increase: "increase",
-    },
-  },
-  computed: {
-    computedMotto(data) {
-      return `${data.motto}!!`;
-    },
+    listData: [] as any[],
   },
   onLoad() {
-    this.setData({
-      canIUseGetUserProfile: true,
-    });
+    this.$perf && this.$perf.mark("setData");
+
+    this.listData = Api.getNews();
+
+    // this.setData({ name: "11"})
+
+    // this.setData({
+    //   listData: Api.getNews()
+    // }, () => {
+    //   console.log("after setData")
+    // })
   },
-  methods: {
-    doIncrease() {
-      this.increase(1);
-    },
+  onPullDownRefresh() {
+    this.listData = Api.getNews();
+    setTimeout(() => {
+      wx.stopPullDownRefresh();
+    }, 1000);
+
+    // this.$perf && this.$perf.mark('setData');
+    // let listData = this.data.listData;
+    // listData.push(...Api.getNews());
+    // this.setData({
+    //     listData
+    // })
+  },
+  onReachBottom() {
+    // 数据全量更新
+    this.$perf && this.$perf.mark("setData");
+    const { listData } = this;
+    listData.push(...Api.getNews());
+    this.listData = listData;
   },
 });
