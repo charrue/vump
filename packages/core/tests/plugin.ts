@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { getPlugins } from "../dist";
+import { getPlugins } from "../src/index";
 import helper from "./helper";
 
 describe("usePlugin", () => {

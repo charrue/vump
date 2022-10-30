@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { mergeDataOptions, mergeLifecycleOptions, mergeMethodOptions } from "./merge-options";
-import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../helper/lifecycle";
+import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../lifecycle";
 import { VumpFactory } from "../types/vump";
 
 const allLifetimes = Array.from(

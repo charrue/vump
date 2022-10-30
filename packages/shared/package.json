@@ -1,0 +1,10 @@
+{
+  "name": "@vump/shared",
+  "private": "true",
+  "description": "",
+  "dependencies": {},
+  "main": "./src/index.ts",
+  "devDependencies": {
+    "ts-toolbelt": "6.15.1"
+  }
+}

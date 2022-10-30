@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
-
 export const HOOKS_HAS_RETURN = [
   "onAddToFavorites",
   "onShareAppMessage",

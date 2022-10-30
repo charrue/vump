@@ -24,10 +24,10 @@
   "devDependencies": {
     "@vue-reactivity/watch": "^0.2.0",
     "@vue/reactivity": "3.2.41",
+    "@vump/shared": "workspace:*",
     "miniprogram-api-typings": "^3.4.6",
     "miniprogram-exparser": "^2.15.0",
     "miniprogram-simulate": "^1.5.7",
-    "ts-toolbelt": "6.15.1",
     "unbuild": "^0.9.4"
   }
 }

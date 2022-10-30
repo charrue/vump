@@ -9,8 +9,17 @@ import {
   WritableComputedRef,
 } from "@vue/reactivity";
 import { watch } from "@vue-reactivity/watch";
-import { EMPTY_OBJ, isFn, isObj, isPlainObj, isStr, warn } from "./helper/utils";
-import { ComponentInternalInstance, COMPUTED_KEY, DATA_KEY } from "./instance";
+import {
+  EMPTY_OBJ,
+  isFn,
+  isObj,
+  isPlainObj,
+  isStr,
+  warn,
+  DATA_KEY,
+  COMPUTED_KEY,
+} from "@vump/shared";
+import { ComponentInternalInstance } from "./instance";
 import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
 import { queueJob } from "./scheduler";
 import { diffData } from "./diff/index";

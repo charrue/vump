@@ -1,3 +1,3 @@
 export { createComponent, createPage } from "./createFactory";
-export { usePlugin, getPlugins } from "./behaviors/useGlobalPlugin";
+export { usePlugin, getPlugins } from "./plugin/index";
 export type { VumpFactory } from "./types/vump";
