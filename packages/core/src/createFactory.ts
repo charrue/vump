@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/indent */
 import { useMixins } from "./mixin/useMixins";
 import { VumpFactory } from "./types/vump";
-import { PAGE_LIFETIMES } from "./lifecycle";
-import { getPlugins } from "./plugin/index";
+import { PAGE_LIFETIMES } from "./lifecycle/index";
+import { getPlugins, usePlugin } from "./plugin/index";
+import { vumpDefaultBehavior } from "./componentOptions";
+
+usePlugin({
+  behaviors: [vumpDefaultBehavior],
+});
 
 const defaultOptions: {
   data: VumpFactory.DefaultDataOption;
