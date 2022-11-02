@@ -32,6 +32,11 @@ export interface MethodOptions {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type DefaultObject = Record<string, any>;
+
+export interface SetupContext {
+  emit: (name: string, ...args: any[]) => void;
+}
+
 export interface ComponentOptions<
   D extends Record<string, any> = DefaultObject,
   C extends ComputedOptions = DefaultObject,
@@ -41,4 +46,5 @@ export interface ComponentOptions<
   computed?: C;
   watch?: ComponentWatchOptions;
   methods?: M;
+  setup?: (props: Readonly<Record<string, any>>, ctx: SetupContext) => Record<string, any>;
 }

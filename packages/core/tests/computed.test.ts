@@ -1,6 +1,6 @@
 import { proxyRefs } from "@vue/reactivity";
 import { describe, expect, test, vi } from "vitest";
-import { COMPUTED_KEY } from "../src/instance";
+import { COMPUTED_KEY } from "@vump/shared";
 import { createComponent } from "./helper";
 import { nextTick } from "../src/scheduler";
 

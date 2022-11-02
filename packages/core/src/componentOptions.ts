@@ -6,8 +6,8 @@ import {
   effectScope,
   proxyRefs,
   reactive,
+  unref,
   WritableComputedRef,
-  toRaw,
 } from "@vue/reactivity";
 import { watch } from "@vue-reactivity/watch";
 import {
@@ -19,6 +19,8 @@ import {
   warn,
   DATA_KEY,
   COMPUTED_KEY,
+  SETUP_KEY,
+  SETUP_REACTIVE_KEY,
 } from "@vump/shared";
 import { ComponentInternalInstance } from "./instance";
 import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
@@ -160,6 +162,39 @@ const initWatch = (instance: ComponentInternalInstance, watchOption: ComponentOp
   });
 };
 
+const initSetup = (instance: ComponentInternalInstance, setupOption: ComponentOptions["setup"]) => {
+  if (!isFn(setupOption)) {
+    warn(`setup() should be a function.`);
+    return;
+  }
+  const props = {};
+  const setupState = setupOption.call(instance, props, { emit: instance.triggerEvent });
+  instance[SETUP_KEY] = setupState;
+
+  const reactiveData = reactive<Record<string, any>>({});
+
+  Object.keys(setupState).forEach((k) => {
+    const val = setupState[k];
+    if (typeof val === "function") {
+      instance[k] = val;
+    } else {
+      reactiveData[k] = val;
+
+      Object.defineProperty(instance, k, {
+        enumerable: true,
+        configurable: true,
+        get: () => unref(val),
+        set: (v) => {
+          // c.value = v;
+          reactiveData[k] = v;
+        },
+      });
+    }
+  });
+
+  instance[SETUP_REACTIVE_KEY] = reactiveData;
+};
+
 const createComponentLifetimes = () => {
   let defFields = {} as ComponentOptions;
   const scope = effectScope();
@@ -177,6 +212,7 @@ const createComponentLifetimes = () => {
       initData(context, defFields.data);
       initComputed(context, defFields.computed);
       initWatch(context, defFields.watch);
+      initSetup(context, defFields.setup);
     });
   }
   function attached(this: unknown) {
@@ -192,10 +228,11 @@ const createComponentLifetimes = () => {
         const currentData = {
           ...context[DATA_KEY],
           ...proxyRefs(context[COMPUTED_KEY]),
+          ...proxyRefs(context[SETUP_REACTIVE_KEY]),
         };
         const updateValue = diffData(currentData, context.data);
 
-        context.setData(toRaw(updateValue));
+        context.setData(updateValue);
       },
       {
         scheduler: () => queueJob(fn),
