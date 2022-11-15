@@ -1,3 +1,5 @@
+import { isArr, isObj } from "./is";
+
 export const NOOP = () => {
   //
 };
@@ -54,3 +56,8 @@ export const omit = <T, K extends string>(names: readonly K[], obj: T) => {
   }
   return result as Omit<T, K>;
 };
+
+export const isEmpty = (val: unknown) =>
+  (!val && val !== 0) ||
+  (isArr(val) && val.length === 0) ||
+  (isObj(val) && !Object.keys(val).length);

@@ -21,6 +21,8 @@ import {
   COMPUTED_KEY,
   SETUP_KEY,
   SETUP_REACTIVE_KEY,
+  SCOPE_KEY,
+  isEmpty,
 } from "@vump/shared";
 import { ComponentInternalInstance } from "./instance";
 import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
@@ -163,12 +165,20 @@ const initWatch = (instance: ComponentInternalInstance, watchOption: ComponentOp
 };
 
 const initSetup = (instance: ComponentInternalInstance, setupOption: ComponentOptions["setup"]) => {
-  if (!isFn(setupOption)) {
-    warn(`setup() should be a function.`);
+  if (!setupOption && !isFn(setupOption)) {
+    warn(`setup() should be a function`);
     return;
   }
   const props = {};
   const setupState = setupOption.call(instance, props, { emit: instance.triggerEvent });
+  if (!isObj(setupState)) {
+    warn(
+      `setup() should return an object. Received: ${
+        setupState === null ? "null" : typeof setupState
+      }`,
+    );
+    return;
+  }
   instance[SETUP_KEY] = setupState;
 
   const reactiveData = reactive<Record<string, any>>({});
@@ -197,7 +207,6 @@ const initSetup = (instance: ComponentInternalInstance, setupOption: ComponentOp
 
 const createComponentLifetimes = () => {
   let defFields = {} as ComponentOptions;
-  const scope = effectScope();
 
   function definitionFilter(fields: ComponentOptions) {
     defFields = fields;
@@ -207,6 +216,11 @@ const createComponentLifetimes = () => {
     context.isCreated = true;
     context.isAttached = false;
     context.isDetached = false;
+
+    // effectScope 每次实例化时，都需要更新
+    // 因为effectScope.off之后，就不会再捕获effect
+    const scope = effectScope();
+    context[SCOPE_KEY] = scope;
 
     scope.run(() => {
       initData(context, defFields.data);
@@ -219,17 +233,25 @@ const createComponentLifetimes = () => {
     const context = this as unknown as ComponentInternalInstance;
     context.isAttached = true;
 
-    // TODO: 热更新时，context中 DATA_KEY、COMPUTED_KEY 将会是 undefined
     const fn = effect(
       () => {
         // 此处相较Vue不同的是
         // Vue中的computed是在访问的时候才会运算一次
         // 这里computed至少会执行一次
-        const currentData = {
-          ...context[DATA_KEY],
-          ...proxyRefs(context[COMPUTED_KEY]),
-          ...proxyRefs(context[SETUP_REACTIVE_KEY]),
-        };
+
+        let currentData = context[DATA_KEY];
+        if (!isEmpty(context[COMPUTED_KEY])) {
+          currentData = {
+            ...currentData,
+            ...proxyRefs(context[COMPUTED_KEY]),
+          };
+        }
+        if (!isEmpty(context[SETUP_REACTIVE_KEY])) {
+          currentData = {
+            ...currentData,
+            ...proxyRefs(context[SETUP_REACTIVE_KEY]),
+          };
+        }
         const updateValue = diffData(currentData, context.data);
 
         context.setData(updateValue);
@@ -244,7 +266,9 @@ const createComponentLifetimes = () => {
     const context = this as unknown as ComponentInternalInstance;
 
     context.isDetached = true;
-    scope.stop();
+    if (context[SCOPE_KEY]) {
+      context[SCOPE_KEY].stop();
+    }
   }
 
   return {
