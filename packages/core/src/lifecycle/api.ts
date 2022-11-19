@@ -50,7 +50,7 @@ const injectHook = (
   }
 };
 
-const createLifeCycle = <T extends (...args: any[]) => any = () => void>(
+const createLifeCycle = <T extends (...args: any[]) => any = () => void | Promise<void>>(
   hookName: LifecycleHooks | SharedLifecycleHooks,
 ) => {
   return (fn: T, target: any = getCurrentInstance()) => {
@@ -71,17 +71,31 @@ export const onAttached = createLifeCycle(LifecycleHooks.COMPONENT_ATTACHED);
 export const onDetached = createLifeCycle(LifecycleHooks.COMPONENT_DETACHED);
 export const onComponentReady = createLifeCycle(LifecycleHooks.COMPONENT_READY);
 export const onShow = createLifeCycle(LifecycleHooks.SHOW);
-export const onLoad = createLifeCycle(LifecycleHooks.LOADED);
+export const onLoad = createLifeCycle<
+  (query: Record<string, string | undefined>) => void | Promise<void>
+>(LifecycleHooks.LOADED);
 export const onUnload = createLifeCycle(LifecycleHooks.UNLOADED);
 export const onPageReady = createLifeCycle(LifecycleHooks.PAGE_READY);
 export const onHide = createLifeCycle(LifecycleHooks.HIDE);
 export const onPullDownRefresh = createLifeCycle(LifecycleHooks.PULL_DOWN_REFRESH);
 export const onReachBottom = createLifeCycle(LifecycleHooks.REACH_BOTTOM);
-export const onShareAppMessage = createLifeCycle(LifecycleHooks.SHARE_APP_MESSAGE);
-export const onShareTimeline = createLifeCycle(LifecycleHooks.SHARE_TIMELINE);
-export const onAddToFavorites = createLifeCycle(LifecycleHooks.ADD_TO_FAVORITES);
+export const onShareAppMessage = createLifeCycle<
+  (
+    options: WechatMiniprogram.Page.IShareAppMessageOption,
+  ) => WechatMiniprogram.Page.ICustomShareContent
+>(LifecycleHooks.SHARE_APP_MESSAGE);
+export const onShareTimeline = createLifeCycle<() => WechatMiniprogram.Page.ICustomTimelineContent>(
+  LifecycleHooks.SHARE_TIMELINE,
+);
+export const onAddToFavorites = createLifeCycle<
+  (
+    options: WechatMiniprogram.Page.IAddToFavoritesOption,
+  ) => WechatMiniprogram.Page.IAddToFavoritesContent
+>(LifecycleHooks.ADD_TO_FAVORITES);
 export const onPageScroll = createLifeCycle(LifecycleHooks.PAGE_SCROLL);
-export const onPageResize = createLifeCycle(LifecycleHooks.PAGE_RESIZE);
+export const onPageResize = createLifeCycle<
+  (options: WechatMiniprogram.Page.IResizeOption) => void | Promise<void>
+>(LifecycleHooks.PAGE_RESIZE);
 export const onTabItemTap = createLifeCycle(LifecycleHooks.TAB_ITEM_TAP);
 export const onSaveExitState = createLifeCycle(LifecycleHooks.SAVE_EXIT_STATE);
 

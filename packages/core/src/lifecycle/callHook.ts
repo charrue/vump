@@ -13,7 +13,7 @@ const isComponentHook = (hookName: LifecycleHooks) => {
 export const callHook = (
   instance: ComponentInternalInstance,
   hookName: LifecycleHooks,
-  args?: any[],
+  ...args: any[]
 ) => {
   if (!instance) return;
   if (instance[HOOK_KEY] && isArr(instance[HOOK_KEY][hookName])) {

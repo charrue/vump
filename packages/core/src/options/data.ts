@@ -4,7 +4,7 @@ import { reactive } from "@vue/reactivity";
 
 export type DataOption = Record<string, any>;
 
-export const initData = (instance: ComponentInternalInstance, dataOption: DataOption) => {
+export const initData = (instance: ComponentInternalInstance, dataOption?: DataOption) => {
   // data默认是空对象
   instance[DATA_KEY] = reactive(EMPTY_OBJ);
   if (!dataOption) {

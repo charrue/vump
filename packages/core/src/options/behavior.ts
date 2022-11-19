@@ -155,9 +155,9 @@ const vueStyleBehavior = (isPage: boolean) => {
         const context = this as unknown as ComponentInternalInstance;
         callHook(context, LifecycleHooks.SHOW);
       },
-      onLoad(this: unknown) {
+      onLoad(this: unknown, query: Record<string, string | undefined>) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.LOADED);
+        callHook(context, LifecycleHooks.LOADED, query);
       },
       onReady(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
@@ -179,9 +179,9 @@ const vueStyleBehavior = (isPage: boolean) => {
         const context = this as unknown as ComponentInternalInstance;
         callHook(context, LifecycleHooks.REACH_BOTTOM);
       },
-      onShareAppMessage(this: unknown) {
+      onShareAppMessage(this: unknown, options: WechatMiniprogram.Page.IShareAppMessageOption) {
         const context = this as unknown as ComponentInternalInstance;
-        const hookResult = callHook(context, LifecycleHooks.SHARE_APP_MESSAGE);
+        const hookResult = callHook(context, LifecycleHooks.SHARE_APP_MESSAGE, options);
         if (hookResult) {
           return hookResult;
         }
@@ -193,24 +193,24 @@ const vueStyleBehavior = (isPage: boolean) => {
           return hookResult;
         }
       },
-      onAddToFavorites(this: unknown) {
+      onAddToFavorites(this: unknown, options: WechatMiniprogram.Page.IAddToFavoritesOption) {
         const context = this as unknown as ComponentInternalInstance;
-        const hookResult = callHook(context, LifecycleHooks.ADD_TO_FAVORITES);
+        const hookResult = callHook(context, LifecycleHooks.ADD_TO_FAVORITES, options);
         if (hookResult) {
           return hookResult;
         }
       },
-      onPageScroll(this: unknown) {
+      onPageScroll(this: unknown, options: WechatMiniprogram.Page.IPageScrollOption) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.PAGE_SCROLL);
+        callHook(context, LifecycleHooks.PAGE_SCROLL, options);
       },
-      onResize(this: unknown) {
+      onResize(this: unknown, options: WechatMiniprogram.Page.IResizeOption) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.PAGE_RESIZE);
+        callHook(context, LifecycleHooks.PAGE_RESIZE, options);
       },
-      onTabItemTap(this: unknown) {
+      onTabItemTap(this: unknown, options: WechatMiniprogram.Page.ITabItemTapOption) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.TAB_ITEM_TAP);
+        callHook(context, LifecycleHooks.TAB_ITEM_TAP, options);
       },
       onSaveExitState(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
