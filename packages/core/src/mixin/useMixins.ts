@@ -1,21 +1,18 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
 import { mergeDataOptions, mergeLifecycleOptions, mergeMethodOptions } from "./merge-options";
 import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../lifecycle";
-import { VumpFactory } from "../types/vump";
 import { isFn } from "@vump/shared";
+import { MixinOption } from "../options/mixins";
 
 const allLifetimes = Array.from(
   new Set(([] as string[]).concat(PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES)),
 );
 
-export const useMixins = (
-  options: VumpFactory.IAnyObject,
-  mixins: VumpFactory.ComponentOptions["mixins"] = [],
-) => {
-  if (Array.isArray(mixins) && mixins.length > 0) {
-    mixins.forEach((mixin) => {
+export const useMixins = (options: WechatMiniprogram.IAnyObject, userMixins: MixinOption = []) => {
+  if (Array.isArray(userMixins) && userMixins.length > 0) {
+    userMixins.forEach((mixin) => {
       const { methods, behaviors, ...others } = mixin;
+
       if (behaviors && Array.isArray(behaviors)) {
         options.behaviors = [...(options.behaviors || []), ...(behaviors || [])];
       }

@@ -2,7 +2,7 @@ import simulate from "miniprogram-simulate";
 // @ts-ignore
 import exparser from "miniprogram-exparser";
 import { resolve } from "path";
-import { createVueStyleBehavior } from "../src/componentOptions";
+import { createVueStyleBehavior } from "../src/options/index";
 import { vi } from "vitest";
 
 const originLoad = simulate.load;
@@ -44,11 +44,28 @@ export const createComponent = (options: Record<string, any> = {}, isPage = fals
   const parent = document.createElement("parent-wrapper");
   component.attach(parent);
 
+  if (isPage) {
+    component.instance.triggerPageLifeTime("load");
+    component.instance.triggerPageLifeTime("ready");
+    component.instance.triggerPageLifeTime("show");
+  }
+
   return {
     component,
     instance: component.instance as any,
     setDataSpy,
+    componentId,
   };
+};
+
+export const loadComponent = (options: Record<string, any> = {}) => {
+  const componentId = helper.load({
+    template: "<view></view>",
+    behaviors: [createVueStyleBehavior(false)],
+    ...options,
+  });
+
+  return componentId;
 };
 
 export default helper;
