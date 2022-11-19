@@ -1,6 +1,6 @@
-import { mergeLeft, omit, pick } from "../helper/utils";
-import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../helper/lifecycle";
-import type { PlainObject, Keyof, Fn } from "../types/utils";
+import { mergeLeft, omit, pick } from "@vump/shared";
+import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../lifecycle/index";
+import type { PlainObject, Keyof, Fn } from "../types";
 
 const LIFECYCLE_HOOKS = [...PAGE_LIFETIMES, ...COMPONENT_LIFETIMES] as const;
 /**
@@ -95,7 +95,7 @@ export const mergeLifecycleOptions = <P extends Record<string, any>, C extends R
   );
   const composedLifecycleCallbacks: Record<Keyof<typeof lifecycleCallbacks>, Fn> = {} as any;
 
-  (Object.keys(lifecycleCallbacks) as Keyof<typeof lifecycleCallbacks>[]).forEach(
+  (Object.keys(lifecycleCallbacks) as Array<Keyof<typeof lifecycleCallbacks>>).forEach(
     (lifecycleName) => {
       const callbacks = lifecycleCallbacks[lifecycleName];
       if (!Array.isArray(callbacks) || callbacks.length === 0) return;

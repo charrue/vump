@@ -5,7 +5,7 @@
     "include": []
   },
   "compileType": "miniprogram",
-  "projectname": "ts-sass-demo",
+  "projectname": "vump-demo",
   "setting": {
     "useCompilerPlugins": [
       "typescript",
@@ -35,8 +35,13 @@
     },
     "disableUseStrict": false,
     "minifyWXML": true,
-    "packNpmManually": false,
-    "packNpmRelationList": []
+    "packNpmManually": true,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./"
+      }
+    ]
   },
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

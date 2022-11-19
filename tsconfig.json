@@ -23,6 +23,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "types": ["node"],
     "typeRoots": [
       "node_modules/@types"
     ]

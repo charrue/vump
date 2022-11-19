@@ -7,9 +7,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@charrue/vump": "workspace:*",
-    "mobx-miniprogram": "^4.13.2",
-    "mobx-miniprogram-bindings": "^2.1.5"
+    "@charrue/vump": "workspace:*"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"

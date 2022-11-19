@@ -1,27 +1,23 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-nested-ternary */
 import { mergeDataOptions, mergeLifecycleOptions, mergeMethodOptions } from "./merge-options";
-import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../helper/lifecycle";
-import { VumpFactory } from "../types/vump";
+import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../lifecycle";
+import { isFn } from "@vump/shared";
+import { MixinOption } from "../options/mixins";
 
 const allLifetimes = Array.from(
   new Set(([] as string[]).concat(PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES)),
 );
 
-export const useMixins = (
-  options: VumpFactory.IAnyObject,
-  mixins: VumpFactory.IAnyObject[] = [],
-) => {
-  if (Array.isArray(mixins) && mixins.length > 0) {
-    mixins.forEach((mixin) => {
-      // if (Array.isArray(mixin.mixins) && mixin.mixins.length > 0) {
-      //   useMixins(options, mixin.mixins);
-      // }
+export const useMixins = (options: WechatMiniprogram.IAnyObject, userMixins: MixinOption = []) => {
+  if (Array.isArray(userMixins) && userMixins.length > 0) {
+    userMixins.forEach((mixin) => {
       const { methods, behaviors, ...others } = mixin;
+
       if (behaviors && Array.isArray(behaviors)) {
         options.behaviors = [...(options.behaviors || []), ...(behaviors || [])];
       }
       if (methods) {
-        options.methods = mergeMethodOptions(options.methods || {}, mixin.methods);
+        options.methods = mergeMethodOptions(options.methods || {}, mixin.methods || {});
       }
 
       Object.keys(others)
@@ -29,7 +25,18 @@ export const useMixins = (
           return !allLifetimes.includes(k);
         })
         .forEach((optionName) => {
-          options[optionName] = mergeDataOptions(options[optionName] || {}, others[optionName]);
+          const parentData = options[optionName]
+            ? isFn(options[optionName])
+              ? options[optionName]()
+              : options[optionName]
+            : {};
+          const childData = others[optionName]
+            ? isFn(others[optionName])
+              ? others[optionName]()
+              : others[optionName]
+            : {};
+
+          options[optionName] = mergeDataOptions(parentData, childData);
         });
 
       const lifecycleCallbacks = mergeLifecycleOptions(options, mixin);

@@ -1,10 +1,3 @@
-import { usePlugin } from "@charrue/vump";
-import { storeBindingsBehavior } from "mobx-miniprogram-bindings";
+// import "./utils/perf";
 
-usePlugin({
-  behaviors: [storeBindingsBehavior],
-});
-
-App<IAppOption>({
-  globalData: {},
-});
+App({});
