@@ -125,12 +125,12 @@ function getStat(perf, type) {
 function wrapperSetData(namespace, shouldMeasureFn, contentFn, getAutoFn, oldSetData) {
   oldSetData = oldSetData || this.setData;
   this.setData = function setData(data, callback) {
-    console.log("....before", data);
+    // console.log("....before", data);
     if (Object.keys(data).length === 0) return; // 忽略空数据
     if (!shouldMeasureFn.call(this, data, this.$perf.autoArgs) || this.$perf.ended) {
       return oldSetData.call(this, data, callback);
     }
-    console.log('....after', data)
+    // console.log('....after', data)
     this.$perf.measure("setData.before");
     oldSetData.call(this, data, function () {
       this.$perf.measure("setData.end");

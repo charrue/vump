@@ -4,8 +4,10 @@ import {
   ComputedSetter,
   effect,
   effectScope,
+  pauseTracking,
   proxyRefs,
   reactive,
+  resetTracking,
   unref,
   WritableComputedRef,
 } from "@vue/reactivity";
@@ -22,14 +24,22 @@ import {
   SETUP_KEY,
   SETUP_REACTIVE_KEY,
   SCOPE_KEY,
+  IS_PAGE_KEY,
+  HOOK_KEY,
   isEmpty,
 } from "@vump/shared";
-import { ComponentInternalInstance } from "./instance";
-import { ComponentOptions, ObjectWatchOptionItem, WatchCallback } from "./types/componentOptions";
+import { ComponentInternalInstance, setCurrentInstance, unsetCurrentInstance } from "./instance";
+import { ObjectWatchOptionItem, WatchCallback } from "./types/watch";
+import { VumpFactory } from "./types/vump";
 import { queueJob } from "./scheduler";
 import { diffData } from "./diff/index";
+import { callHook } from "./lifecycle/api";
+import { LifecycleHooks } from "./lifecycle";
 
-const initData = (instance: ComponentInternalInstance, dataOption: ComponentOptions["data"]) => {
+const initData = (
+  instance: ComponentInternalInstance,
+  dataOption: VumpFactory.ComponentOptions["data"],
+) => {
   // data默认是空对象
   instance[DATA_KEY] = reactive(EMPTY_OBJ);
   if (!dataOption) {
@@ -59,7 +69,7 @@ const initData = (instance: ComponentInternalInstance, dataOption: ComponentOpti
 
 const initComputed = (
   instance: ComponentInternalInstance,
-  computedOption: ComponentOptions["computed"],
+  computedOption: VumpFactory.ComponentOptions["computed"],
 ) => {
   const bindingComputedData: Record<string, WritableComputedRef<any>> = {};
 
@@ -113,7 +123,10 @@ const createPathGetter = (ctx: any, path: string) => {
   };
 };
 
-const initWatch = (instance: ComponentInternalInstance, watchOption: ComponentOptions["watch"]) => {
+const initWatch = (
+  instance: ComponentInternalInstance,
+  watchOption: VumpFactory.ComponentOptions["watch"],
+) => {
   if (!watchOption) {
     return;
   }
@@ -164,8 +177,15 @@ const initWatch = (instance: ComponentInternalInstance, watchOption: ComponentOp
   });
 };
 
-const initSetup = (instance: ComponentInternalInstance, setupOption: ComponentOptions["setup"]) => {
-  if (!setupOption && !isFn(setupOption)) {
+const initSetup = (
+  instance: ComponentInternalInstance,
+  setupOption: VumpFactory.ComponentOptions["setup"],
+) => {
+  if (!setupOption) {
+    return;
+  }
+
+  if (setupOption && !isFn(setupOption)) {
     warn(`setup() should be a function`);
     return;
   }
@@ -205,14 +225,37 @@ const initSetup = (instance: ComponentInternalInstance, setupOption: ComponentOp
   instance[SETUP_REACTIVE_KEY] = reactiveData;
 };
 
-const createComponentLifetimes = () => {
-  let defFields = {} as ComponentOptions;
+const vueStyleBehavior = (isPage: boolean) => {
+  let defFields = {} as VumpFactory.ComponentOptions;
 
-  function definitionFilter(fields: ComponentOptions) {
-    defFields = fields;
+  function definitionFilter(fields: VumpFactory.IAnyObject) {
+    defFields = fields as unknown as VumpFactory.ComponentOptions;
   }
   function created(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
+    context[IS_PAGE_KEY] = isPage;
+    context[HOOK_KEY] = {
+      [LifecycleHooks.COMPONENT_CREATED]: null,
+      [LifecycleHooks.COMPONENT_ATTACHED]: null,
+      [LifecycleHooks.COMPONENT_READY]: null,
+      [LifecycleHooks.COMPONENT_MOVED]: null,
+      [LifecycleHooks.COMPONENT_DETACHED]: null,
+      [LifecycleHooks.COMPONENT_ERROR]: null,
+      [LifecycleHooks.SHOW]: null,
+      [LifecycleHooks.PAGE_READY]: null,
+      [LifecycleHooks.LOADED]: null,
+      [LifecycleHooks.HIDE]: null,
+      [LifecycleHooks.UNLOADED]: null,
+      [LifecycleHooks.PULL_DOWN_REFRESH]: null,
+      [LifecycleHooks.REACH_BOTTOM]: null,
+      [LifecycleHooks.SHARE_APP_MESSAGE]: null,
+      [LifecycleHooks.SHARE_TIMELINE]: null,
+      [LifecycleHooks.ADD_TO_FAVORITES]: null,
+      [LifecycleHooks.TAB_ITEM_TAP]: null,
+      [LifecycleHooks.PAGE_SCROLL]: null,
+      [LifecycleHooks.PAGE_RESIZE]: null,
+      [LifecycleHooks.SAVE_EXIT_STATE]: null,
+    };
     context.isCreated = true;
     context.isAttached = false;
     context.isDetached = false;
@@ -221,20 +264,34 @@ const createComponentLifetimes = () => {
     // 因为effectScope.off之后，就不会再捕获effect
     const scope = effectScope();
     context[SCOPE_KEY] = scope;
+    setCurrentInstance(context);
 
     scope.run(() => {
       initData(context, defFields.data);
       initComputed(context, defFields.computed);
       initWatch(context, defFields.watch);
+      pauseTracking();
       initSetup(context, defFields.setup);
+      resetTracking();
     });
+    if (!isPage) {
+      callHook(context, LifecycleHooks.COMPONENT_CREATED);
+    }
+
+    unsetCurrentInstance();
   }
   function attached(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
+    context.isCreated = true;
     context.isAttached = true;
+    context.isDetached = false;
 
     const fn = effect(
       () => {
+        if (!context.isAttached) {
+          warn("you cannot setData before component attached");
+          return;
+        }
         // 此处相较Vue不同的是
         // Vue中的computed是在访问的时候才会运算一次
         // 这里computed至少会执行一次
@@ -260,25 +317,116 @@ const createComponentLifetimes = () => {
         scheduler: () => queueJob(fn),
       },
     ) as () => void;
+
+    if (!isPage) {
+      callHook(context, LifecycleHooks.COMPONENT_ATTACHED);
+    }
   }
 
   function detached(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
 
+    context.isCreated = true;
+    context.isAttached = true;
     context.isDetached = true;
+
     if (context[SCOPE_KEY]) {
       context[SCOPE_KEY].stop();
     }
+
+    if (!isPage) {
+      callHook(context, LifecycleHooks.COMPONENT_DETACHED);
+    }
+  }
+
+  function moved(this: unknown) {
+    const context = this as unknown as ComponentInternalInstance;
+    if (!isPage) {
+      callHook(context, LifecycleHooks.COMPONENT_MOVED);
+    }
+  }
+
+  function errorLifetime(this: unknown) {
+    const context = this as unknown as ComponentInternalInstance;
+    if (!isPage) {
+      callHook(context, LifecycleHooks.COMPONENT_MOVED);
+    }
+  }
+
+  let otherOptions: Record<string, any> = {};
+  if (isPage) {
+    otherOptions = {
+      onShow(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.SHOW);
+      },
+      onLoad(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.LOADED);
+      },
+      onReady(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.PAGE_READY);
+      },
+      onHide(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.HIDE);
+      },
+      onUnload(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.UNLOADED);
+      },
+      onPullDownRefresh(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.PULL_DOWN_REFRESH);
+      },
+      onReachBottom(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.REACH_BOTTOM);
+      },
+      onShareAppMessage(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        // TODO: 具有返回值
+        callHook(context, LifecycleHooks.SHARE_APP_MESSAGE);
+      },
+      onShareTimeline(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.SHARE_TIMELINE);
+      },
+      onAddToFavorites(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.ADD_TO_FAVORITES);
+      },
+      onPageScroll(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.PAGE_SCROLL);
+      },
+      onResize(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.PAGE_RESIZE);
+      },
+      onTabItemTap(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.TAB_ITEM_TAP);
+      },
+      onSaveExitState(this: unknown) {
+        const context = this as unknown as ComponentInternalInstance;
+        callHook(context, LifecycleHooks.SAVE_EXIT_STATE);
+      },
+    };
   }
 
   return {
     lifetimes: {
       created,
       attached,
+      moved,
       detached,
+      error: errorLifetime,
     },
     definitionFilter,
+    ...otherOptions,
   };
 };
 
-export const vumpDefaultBehavior = Behavior(createComponentLifetimes());
+export const createVueStyleBehavior = (isPage: boolean) => Behavior(vueStyleBehavior(isPage));

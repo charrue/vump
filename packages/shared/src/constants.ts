@@ -1,5 +1,9 @@
 const ns = "charrue";
 
+export const HOOK_KEY = `__${ns}_hook_key__` as const;
+
+export const IS_PAGE_KEY = `__${ns}_is_page_key__` as const;
+
 export const DATA_KEY = `__${ns}_data_key__` as const;
 
 export const COMPUTED_KEY = `__${ns}_computed_key__` as const;

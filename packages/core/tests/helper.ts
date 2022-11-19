@@ -1,7 +1,8 @@
 import simulate from "miniprogram-simulate";
+// @ts-ignore
 import exparser from "miniprogram-exparser";
 import { resolve } from "path";
-import { vumpDefaultBehavior } from "../src/componentOptions";
+import { createVueStyleBehavior } from "../src/componentOptions";
 import { vi } from "vitest";
 
 const originLoad = simulate.load;
@@ -10,7 +11,7 @@ const helper = {
   ...simulate,
   exparser,
 
-  renderComponent(componentPath, ...args: any) {
+  renderComponent(componentPath: string, ...args: any) {
     let newCompPath = componentPath;
     if (typeof componentPath === "string") {
       newCompPath = resolve(__dirname, "./features", componentPath);
@@ -25,11 +26,11 @@ const helper = {
   },
 };
 
-export const createComponent = (options: Record<string, any> = {}) => {
+export const createComponent = (options: Record<string, any> = {}, isPage = false) => {
   const setDataSpy = vi.fn();
   const componentId = helper.load({
     template: "<view></view>",
-    behaviors: [vumpDefaultBehavior],
+    behaviors: [createVueStyleBehavior(isPage)],
     ...options,
   });
 

@@ -20,6 +20,4 @@ const createGlobalPluginFactory = () => {
 
 const methods = createGlobalPluginFactory();
 
-export const { usePlugin } = methods;
-
-export const { getPlugins } = methods;
+export const { usePlugin, getPlugins } = methods;

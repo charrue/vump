@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/indent */
+import { ComputedGetter, WritableComputedOptions } from "@vue/reactivity";
+import { ComponentWatchOptions } from "./watch";
 
 interface WechatMiniprogramComponentLifetimes {
   /**
@@ -65,27 +67,19 @@ export namespace VumpFactory {
   }
   export type IAnyObject = WechatMiniprogram.IAnyObject;
   export type CustomOption = WechatMiniprogram.IAnyObject;
-  export interface VumpInnerMethods {
-    diffUpdate(data: Record<string, any>): void;
-  }
 
-  export interface Data<D extends DefaultDataOption> {
-    /** 组件的内部数据，和 `properties` 一同用于组件的模板渲染 */
-    data?: D;
+  export interface SetupContext {
+    emit: (name: string, ...args: any[]) => void;
   }
-  export interface Property<P extends DefaultPropertyOption> {
-    /** 组件的对外属性，是属性名到属性设置的映射表 */
-    properties: P;
-  }
-  export interface Method<M extends DefaultMethodOption, TIsPage extends boolean = false> {
-    /** 组件的方法，包括事件响应函数和任意的自定义方法，关于事件响应函数的使用，参见 [组件间通信与事件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html) */
-    methods: M & (TIsPage extends true ? Partial<WechatMiniprogram.Page.ILifetime> : IAnyObject);
-  }
+  export type SetupOption = (
+    props: Readonly<Record<string, any>>,
+    ctx: SetupContext,
+  ) => Record<string, any>;
 
-  export interface Computed<C> {
-    /** 组件的计算属性 */
-    computed?: C;
-  }
+  export type DataOption<T> = T | (() => T);
+
+  /** 组件的计算属性 */
+  export type ComputedOption = Record<string, ComputedGetter<any> | WritableComputedOptions<any>>;
   export type PageComputedOption<TData> = Record<string, (data: TData) => any>;
   export type ComponentComputedOption<TData, TProperty = Record<string, any>> = Record<
     string,
@@ -102,21 +96,21 @@ export namespace VumpFactory {
     data: { [K in keyof C]: ReturnType<C[K]> } & { [K in keyof P]: any };
   };
 
-  export interface Watch<D extends Partial<DefaultWatchOption>> {
-    /** 组件的监听属性，会在属性值发生变化时进行调用 */
-    watch?: D;
-  }
+  /** 组件的复用功能，现版本不支持mixins的嵌套  */
+  export type MixinOption = Array<{
+    data?: DefaultDataOption;
+    properties?: DefaultPropertyOption;
+    methods?: DefaultMethodOption & IAnyObject;
+    computed?: ComputedOption;
+    watch?: ComponentWatchOptions;
+    behaviors?: WechatMiniprogram.Behavior.BehaviorIdentifier[];
+    // TODO: 生命周期函数声明
+    [k: string]: any;
+  }>;
 
-  export interface Mixin {
-    /** 组件的复用功能，现版本不支持mixins的嵌套  */
-    mixins?: Array<
-      Data<DefaultDataOption> &
-        Partial<Property<DefaultPropertyOption>> &
-        Partial<Method<DefaultMethodOption>>
-    >;
-  }
-
-  export type OtherOption = Omit<WechatMiniprogram.Component.OtherOption, "pageLifetimes">;
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface PageOtherOption {}
+  export type ComponentOtherOption = WechatMiniprogram.Component.OtherOption;
 
   export type ComponentInstance<
     TData extends DefaultDataOption,
@@ -160,17 +154,18 @@ export namespace VumpFactory {
       TData,
       TProperty
     >,
-    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TIsPage extends boolean = false,
     TOptions extends CustomOption = CustomOption,
-  > = Partial<VumpFactory.Data<TData>> & // data
-    Partial<VumpFactory.Property<TProperty>> & // property
-    Partial<VumpFactory.Method<TMethod, TIsPage>> & // methods
-    Partial<VumpFactory.Computed<TComputed>> & // computed
-    Partial<VumpFactory.Watch<TWatch>> & // watch
-    Partial<VumpFactory.Mixin> & // mixins
-    Partial<VumpFactory.OtherOption> &
+  > = {
+    setup?: SetupOption;
+    properties?: TProperty;
+    data?: DataOption<TData>;
+    methods?: TMethod & IAnyObject;
+    computed?: ComputedOption;
+    watch?: ComponentWatchOptions;
+    mixins?: MixinOption;
+  } & Partial<VumpFactory.ComponentOtherOption> &
     Partial<
       WechatMiniprogramComponentLifetimes & WechatMiniprogram.Component.Lifetimes["lifetimes"]
     > &
@@ -187,7 +182,6 @@ export namespace VumpFactory {
       TData,
       TProperty
     >,
-    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
     TOptions extends CustomOption = CustomOption,
   > = ComponentOptions<
@@ -195,7 +189,6 @@ export namespace VumpFactory {
     TProperty,
     TMethod,
     TComputed,
-    TWatch,
     TCustomInstanceProperty,
     false,
     TOptions & { order?: number }
@@ -205,14 +198,15 @@ export namespace VumpFactory {
     TData extends DefaultDataOption = DefaultDataOption,
     TMethod extends DefaultMethodOption = DefaultMethodOption,
     TComputed extends ComponentComputedOption<TData> = ComponentComputedOption<TData>,
-    TWatch extends Partial<DefaultWatchOption> = Partial<DefaultWatchOption>,
     TCustomInstanceProperty extends IAnyObject = IAnyObject,
-  > = Partial<VumpFactory.Data<TData>> & // data
-    Partial<VumpFactory.Method<TMethod, true>> & // methods
-    Partial<VumpFactory.Computed<TComputed>> & // computed
-    Partial<VumpFactory.Watch<TWatch>> & // watch
-    Partial<VumpFactory.Mixin> & // mixins
-    Partial<VumpFactory.OtherOption> &
+  > = {
+    setup?: SetupOption;
+    data?: DataOption<TData>;
+    methods?: TMethod & Partial<WechatMiniprogram.Page.ILifetime>;
+    computed?: ComputedOption;
+    watch?: ComponentWatchOptions;
+    mixins?: MixinOption;
+  } & Partial<VumpFactory.PageOtherOption> &
     Partial<WechatMiniprogram.Page.ILifetime> &
     ThisType<PageInstance<TData, TMethod, TComputed, TCustomInstanceProperty>> &
     CustomOption;
@@ -223,18 +217,16 @@ export namespace VumpFactory {
       TProperty extends DefaultPropertyOption,
       TMethod extends DefaultMethodOption,
       TComputed extends Record<string, (data: TData) => any>,
-      TWatch extends Partial<DefaultWatchOption>,
       TCustomInstanceProperty extends IAnyObject = IAnyObject,
       TIsPage extends boolean = false,
     >(
       options: TIsPage extends true
-        ? VumpFactory.PageOptions<TData, TMethod, TComputed, TWatch, TCustomInstanceProperty>
+        ? VumpFactory.PageOptions<TData, TMethod, TComputed, TCustomInstanceProperty>
         : VumpFactory.ComponentOptions<
             TData,
             TProperty,
             TMethod,
             TComputed,
-            TWatch,
             TCustomInstanceProperty
           >,
     ): string;

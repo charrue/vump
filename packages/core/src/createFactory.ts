@@ -2,12 +2,8 @@
 import { useMixins } from "./mixin/useMixins";
 import { VumpFactory } from "./types/vump";
 import { PAGE_LIFETIMES } from "./lifecycle/index";
-import { getPlugins, usePlugin } from "./plugin/index";
-import { vumpDefaultBehavior } from "./componentOptions";
-
-usePlugin({
-  behaviors: [vumpDefaultBehavior],
-});
+import { getPlugins } from "./plugin/index";
+import { createVueStyleBehavior } from "./componentOptions";
 
 const defaultOptions: {
   data: VumpFactory.DefaultDataOption;
@@ -26,33 +22,27 @@ const createFactory = <T extends "component" | "page">(type: T) => {
       TData,
       TProperty
     > = VumpFactory.ComponentComputedOption<TData, TProperty>,
-    TWatch extends Partial<VumpFactory.DefaultWatchOption> = Partial<VumpFactory.DefaultWatchOption>,
-    TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.VumpInnerMethods,
+    TCustomInstanceProperty extends VumpFactory.IAnyObject = VumpFactory.IAnyObject,
   >(
     opt: T extends "page"
       ? VumpFactory.PageOptions<
           TData,
           TMethod,
           VumpFactory.PageComputedOption<TData>,
-          TWatch,
           TCustomInstanceProperty
         >
-      : VumpFactory.ComponentOptions<
-          TData,
-          TProperty,
-          TMethod,
-          TComputed,
-          TWatch,
-          TCustomInstanceProperty
-        >,
+      : VumpFactory.ComponentOptions<TData, TProperty, TMethod, TComputed, TCustomInstanceProperty>,
   ) => {
     const options = {
       ...defaultOptions,
       ...opt,
     };
-    if (!options.behaviors) {
-      options.behaviors = [];
+
+    let optionBehaviors = [createVueStyleBehavior(type === "page")];
+    if (options.behaviors) {
+      optionBehaviors = optionBehaviors.concat(options.behaviors);
     }
+    options.behaviors = optionBehaviors;
     if (!options.options) {
       options.options = {};
     }
@@ -75,7 +65,6 @@ const createFactory = <T extends "component" | "page">(type: T) => {
             TData,
             TMethod,
             VumpFactory.PageComputedOption<TData>,
-            TWatch,
             TCustomInstanceProperty
           >
         )[lifetimeKey];
@@ -91,7 +80,6 @@ const createFactory = <T extends "component" | "page">(type: T) => {
               TData,
               TMethod,
               VumpFactory.PageComputedOption<TData>,
-              TWatch,
               TCustomInstanceProperty
             >
           )[lifetimeKey];

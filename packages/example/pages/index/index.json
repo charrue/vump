@@ -3,6 +3,7 @@
     "enablePullDownRefresh": true,
     "backgroundTextStyle": "dark",
     "usingComponents": {
-        "card": "../../components/card/card"
+        "card": "../../components/card/card",
+        "comp": "./Comp/index"
     }
 }
