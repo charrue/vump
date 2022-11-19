@@ -1,5 +1,4 @@
 <view>
-  <comp></comp>
   <button bindtap="toLog">to log</button>
   <view>{{ name }}</view>
     <view class="uni-list">
