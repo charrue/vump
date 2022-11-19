@@ -33,7 +33,7 @@ import { ObjectWatchOptionItem, WatchCallback } from "./types/watch";
 import { VumpFactory } from "./types/vump";
 import { queueJob } from "./scheduler";
 import { diffData } from "./diff/index";
-import { callHook } from "./lifecycle/api";
+import { callHook } from "./lifecycle/callHook";
 import { LifecycleHooks } from "./lifecycle";
 
 const initData = (
@@ -353,9 +353,9 @@ const vueStyleBehavior = (isPage: boolean) => {
     }
   }
 
-  let otherOptions: Record<string, any> = {};
+  const otherOptions: Record<string, any> = {};
   if (isPage) {
-    otherOptions = {
+    otherOptions.methods = {
       onShow(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
         callHook(context, LifecycleHooks.SHOW);
@@ -386,16 +386,24 @@ const vueStyleBehavior = (isPage: boolean) => {
       },
       onShareAppMessage(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
-        // TODO: 具有返回值
-        callHook(context, LifecycleHooks.SHARE_APP_MESSAGE);
+        const hookResult = callHook(context, LifecycleHooks.SHARE_APP_MESSAGE);
+        if (hookResult) {
+          return hookResult;
+        }
       },
       onShareTimeline(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.SHARE_TIMELINE);
+        const hookResult = callHook(context, LifecycleHooks.SHARE_TIMELINE);
+        if (hookResult) {
+          return hookResult;
+        }
       },
       onAddToFavorites(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;
-        callHook(context, LifecycleHooks.ADD_TO_FAVORITES);
+        const hookResult = callHook(context, LifecycleHooks.ADD_TO_FAVORITES);
+        if (hookResult) {
+          return hookResult;
+        }
       },
       onPageScroll(this: unknown) {
         const context = this as unknown as ComponentInternalInstance;

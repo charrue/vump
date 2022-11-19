@@ -7,15 +7,28 @@ import {
   unsetCurrentInstance,
 } from "../instance";
 import { callWithAsyncErrorHandling } from "../error";
-import { LifecycleHooks, LifecycleHooksDescription } from "./index";
+import {
+  LifecycleHooks,
+  SharedLifecycleHooks,
+  SharedLifecycleAlias,
+  LifecycleHooksDescription,
+} from "./index";
+
+const isSharedLifecycleHook = (name: string): name is SharedLifecycleHooks => name.startsWith("s_");
 
 const injectHook = (
   instance: ComponentInternalInstance,
-  hookName: LifecycleHooks,
+  hookName: LifecycleHooks | SharedLifecycleHooks,
   fn: () => void,
 ) => {
-  instance[HOOK_KEY][hookName] = instance[HOOK_KEY][hookName] || [];
-  if (isArr(instance[HOOK_KEY][hookName])) {
+  if (isSharedLifecycleHook(hookName)) {
+    const hooks = SharedLifecycleAlias[hookName];
+    injectHook(instance, instance[IS_PAGE_KEY] ? hooks[0] : hooks[1], fn);
+  } else {
+    instance[HOOK_KEY][hookName] = instance[HOOK_KEY][hookName] || [];
+    if (!isArr(instance[HOOK_KEY][hookName])) {
+      instance[HOOK_KEY][hookName] = [];
+    }
     const wrappedHook = (...args: unknown[]) => {
       if (instance.isDetached) {
         return;
@@ -38,7 +51,7 @@ const injectHook = (
 };
 
 const createLifeCycle = <T extends (...args: any[]) => any = () => void>(
-  hookName: LifecycleHooks,
+  hookName: LifecycleHooks | SharedLifecycleHooks,
 ) => {
   return (fn: T, target: any = getCurrentInstance()) => {
     if (!target) {
@@ -53,38 +66,6 @@ const createLifeCycle = <T extends (...args: any[]) => any = () => void>(
   };
 };
 
-const isPageHook = (hookName: LifecycleHooks) => {
-  return hookName.startsWith("p_");
-};
-const isComponentHook = (hookName: LifecycleHooks) => {
-  return hookName.startsWith("c_");
-};
-export const callHook = (
-  instance: ComponentInternalInstance,
-  hookName: LifecycleHooks,
-  args?: any[],
-) => {
-  if (!instance) return;
-  if (instance[HOOK_KEY] && isArr(instance[HOOK_KEY][hookName])) {
-    if (instance[IS_PAGE_KEY] && isComponentHook(hookName)) {
-      warn(`Page中无法调用${LifecycleHooksDescription[hookName]}生命周期函数`);
-      return;
-    }
-    if (!instance[IS_PAGE_KEY] && isPageHook(hookName)) {
-      warn(`Component中无法调用${LifecycleHooksDescription[hookName]}生命周期函数`);
-      return;
-    }
-
-    instance[HOOK_KEY][hookName]!.forEach((fn) => {
-      callWithAsyncErrorHandling(
-        fn.bind(instance),
-        instance,
-        LifecycleHooksDescription[hookName],
-        args,
-      );
-    });
-  }
-};
 export const onCreated = createLifeCycle(LifecycleHooks.COMPONENT_CREATED);
 export const onAttached = createLifeCycle(LifecycleHooks.COMPONENT_ATTACHED);
 export const onDetached = createLifeCycle(LifecycleHooks.COMPONENT_DETACHED);
@@ -103,3 +84,7 @@ export const onPageScroll = createLifeCycle(LifecycleHooks.PAGE_SCROLL);
 export const onPageResize = createLifeCycle(LifecycleHooks.PAGE_RESIZE);
 export const onTabItemTap = createLifeCycle(LifecycleHooks.TAB_ITEM_TAP);
 export const onSaveExitState = createLifeCycle(LifecycleHooks.SAVE_EXIT_STATE);
+
+export const onReady = createLifeCycle(SharedLifecycleHooks.READY);
+export const onMounted = createLifeCycle(SharedLifecycleHooks.MOUNTED);
+export const onUnmounted = createLifeCycle(SharedLifecycleHooks.UNMOUNTED);

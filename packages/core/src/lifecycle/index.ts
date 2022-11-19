@@ -68,6 +68,20 @@ export const enum LifecycleHooks {
   PAGE_RESIZE = "p_re",
   SAVE_EXIT_STATE = "p_ses",
 }
+
+export enum SharedLifecycleHooks {
+  READY = "s_r",
+  MOUNTED = "s_m",
+  UNMOUNTED = "s_um",
+}
+
+export const SharedLifecycleAlias: Record<SharedLifecycleHooks, [LifecycleHooks, LifecycleHooks]> =
+  {
+    [SharedLifecycleHooks.READY]: [LifecycleHooks.PAGE_READY, LifecycleHooks.COMPONENT_READY],
+    [SharedLifecycleHooks.MOUNTED]: [LifecycleHooks.LOADED, LifecycleHooks.COMPONENT_ATTACHED],
+    [SharedLifecycleHooks.UNMOUNTED]: [LifecycleHooks.COMPONENT_DETACHED, LifecycleHooks.UNLOADED],
+  };
+
 // TODO pagelifetime show
 // TODO pagelifetime hide
 
