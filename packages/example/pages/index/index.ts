@@ -1,34 +1,66 @@
 import { createPage } from "@charrue/vump";
-import doLogin from "../../mixins/load-mixin";
-import store from "./store";
+import Api from "../../utils/api.js";
 
 createPage({
-  mixins: [doLogin],
   data: {
-    motto: "Hello World",
+    listData: [] as any[],
+    name: "775537334",
   },
-  storeBindings: {
-    store,
-    fields: {
-      count: () => store.count,
-    },
-    actions: {
-      increase: "increase",
-    },
+  onShow() {
+    console.log("page show");
   },
-  computed: {
-    computedMotto(data) {
-      return `${data.motto}!!`;
-    },
+  onHide() {
+    console.log("page hide");
+  },
+  onReady() {
+    console.log("page ready");
   },
   onLoad() {
-    this.setData({
-      canIUseGetUserProfile: true,
-    });
+    // console.log("this",this)
+    this.$perf && this.$perf.mark("setData");
+
+    this.listData = Api.getNews();
+
+    // this.name = "cvvv" + Date.now()
+
+    // this.setData({ name: "11"})
+
+    // this.setData({
+    //   listData: Api.getNews()
+    // }, () => {
+    //   console.log("after setData")
+    // })
+    console.log("page load");
   },
+  onUnload() {
+    console.log("page unload");
+  },
+  onPullDownRefresh() {
+    this.listData = Api.getNews();
+    setTimeout(() => {
+      wx.stopPullDownRefresh();
+    }, 1000);
+
+    // this.$perf && this.$perf.mark('setData');
+    // let listData = this.data.listData;
+    // listData.push(...Api.getNews());
+    // this.setData({
+    //     listData
+    // })
+  },
+  onReachBottom() {
+    // 数据全量更新
+    this.$perf && this.$perf.mark("setData");
+    const { listData } = this;
+    listData.push(...Api.getNews());
+    this.listData = listData;
+  },
+
   methods: {
-    doIncrease() {
-      this.increase(1);
+    toLog() {
+      wx.navigateTo({
+        url: "/pages/log/log",
+      });
     },
   },
 });

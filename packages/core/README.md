@@ -1,19 +1,15 @@
 <h1 align="center"><span style="color: #34495e">vump</span></h1>
 <p align="center">🚴类Vue语法的微信小程序轻量级工具库，基于原生开发标准</p>
 
-
-
-
-
 ## 特性
 
 - [x] 基于原生开发(利用`Component`)
-- [x] 数据响应增强(computed、watch)
-- [x] 逻辑复用(mixins)
-- [ ] ~~状态管理(Mobx)~~**(0.1.5可用，0.2.0开始弃用，如要使用可利用插件功能自行配置)**
+- [x] 基于`@vue/reactivity`实现了computed、watch功能(对Proxy做了[polyfill](https://github.com/GoogleChrome/proxy-polyfill))
+- [x] 逻辑复用mixins
 - [x] TypeScript支持
 - [x] 基于[wxstore](https://github.com/Tencent/westore)的data diff
 - [x] 插件功能
+- [ ] Composition API
 
 
 
@@ -22,8 +18,6 @@
 ``` bash
 npm install @charrue/vump
 ```
-
-
 
 ## 使用
 
@@ -40,33 +34,23 @@ createComponent({
     nextCount: 1
   },
   computed: {
-    sign(data) {
-      if (data.count === 0) return "";
+    sign() {
+      if (this.count === 0) return "";
 
-      return data.count > 0 ? "+" : "-";
+      return this.count > 0 ? "+" : "-";
     },
   },
   watch: {
-    count(count) {
-      this.setData({
-        nextCount: count + 1
-      })
+    count(val) {
+      this.nextCount = val + 1
     },
   },
   methods: {
     onIncrease() {
-      const newCount = this.data.count + 1;
-      this.setData({
-        count: newCount,
-      });
-
+      this.count += 1;
     },
     onDecrease() {
-      const newCount = this.data.count - 1;
-
-      this.setData({
-        count: newCount,
-      });
+      this.count -= 1;
     },
   },
 });
@@ -126,7 +110,8 @@ createComponent({
   },
   methods: {
     myMethod() {
-      this.data.sum; // 来自于 MobX store 的字段
+      // 来自于 MobX store 的字段
+      console.log(this.data.sum);
     },
   },
 });
