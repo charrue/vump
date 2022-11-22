@@ -1,13 +1,15 @@
 import { SETUP_KEY, SETUP_REACTIVE_KEY, warn, isFn, isObj } from "@vump/shared";
 import { reactive, unref } from "@vue/reactivity";
 import { ComponentInternalInstance } from "../instance";
+import { EmitFn, EmitsOption } from "./emits";
 
-export interface SetupContext {
-  emit: (name: string, ...args: any[]) => void;
+export interface SetupContext<E> {
+  emit: EmitFn<E>;
 }
-export type SetupOption = (
+
+export type SetupOption<E = EmitsOption> = (
   props: Readonly<Record<string, any>>,
-  ctx: SetupContext,
+  ctx: SetupContext<E>,
 ) => Record<string, any>;
 
 export const initSetup = (instance: ComponentInternalInstance, setupOption?: SetupOption) => {
@@ -19,8 +21,11 @@ export const initSetup = (instance: ComponentInternalInstance, setupOption?: Set
     warn(`setup() should be a function`);
     return;
   }
+
+  const emit: EmitFn = instance.triggerEvent;
+
   const props = {};
-  const setupState = setupOption.call(instance, props, { emit: instance.triggerEvent });
+  const setupState = setupOption.call(instance, props, { emit });
   if (!isObj(setupState)) {
     warn(
       `setup() should return an object. Received: ${

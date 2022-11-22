@@ -19,9 +19,9 @@ export type ComponentOptions<
   TCustomInstanceProperty extends IAnyObject = IAnyObject,
   TOptions extends IAnyObject = IAnyObject,
 > = {
-  setup?: SetupOption;
+  setup?: SetupOption<TEmit>;
   properties?: TProperty;
-  emits?: TEmit;
+  emits?: TEmit | Array<keyof TEmit>;
   data?: TData;
   methods?: TMethod;
   computed?: TComputed;
