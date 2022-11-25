@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 
 import { WritableComputedRef } from "@vue/reactivity";
-import { DATA_KEY, COMPUTED_KEY, HOOK_KEY } from "@vump/shared";
+import { DATA_KEY, COMPUTED_KEY, HOOK_KEY, PROP_KEY } from "@vump/shared";
 import { LifecycleHooks } from "./lifecycle/index";
 // eslint-disable-next-line import/no-cycle
 import { DataOption } from "./options/data";
@@ -11,6 +11,7 @@ export interface ComponentInternalInstance {
   isAttached: boolean;
   isDetached: boolean;
   [DATA_KEY]: Record<string, any>;
+  [PROP_KEY]: Record<string, any>;
   [COMPUTED_KEY]: Record<string, WritableComputedRef<any>>;
   [HOOK_KEY]: Record<LifecycleHooks, Function[] | null>;
   [k: string]: any;

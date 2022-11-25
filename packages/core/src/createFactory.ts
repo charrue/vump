@@ -4,7 +4,7 @@ import { PAGE_LIFETIMES } from "./lifecycle/index";
 import { getPlugins } from "./plugin/index";
 import { createVueStyleBehavior } from "./options/index";
 import type { ComponentOptions, PageOptions } from "./options/types";
-import type { PropertyOption } from "./options/props";
+import type { PropsOption } from "./options/props";
 import type { EmitsOption } from "./options/emits";
 import type { MethodOption } from "./options/methods";
 import type { ComputedOption } from "./options/computed";
@@ -21,14 +21,14 @@ const defaultOptions: {
 const createFactory = <T extends "component" | "page">(type: T) => {
   return <
     TData extends DataOption = DataOption,
-    TProperty extends PropertyOption = PropertyOption,
+    TProp extends PropsOption = PropsOption,
     TComputed extends ComputedOption = ComputedOption,
     TMethod extends MethodOption = MethodOption,
     TEmit extends EmitsOption = EmitsOption,
   >(
     opt: T extends "page"
       ? PageOptions<TData, TMethod, TComputed>
-      : ComponentOptions<TData, TProperty, TMethod, TComputed, TEmit>,
+      : ComponentOptions<TData, TProp, TMethod, TComputed, TEmit>,
   ) => {
     const options = {
       ...defaultOptions,
@@ -69,6 +69,8 @@ const createFactory = <T extends "component" | "page">(type: T) => {
         }
       });
     }
+
+    return Component(options as any);
   };
 };
 

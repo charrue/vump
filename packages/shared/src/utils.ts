@@ -6,7 +6,7 @@ export const NOOP = () => {
 
 export const EMPTY_OBJ = {};
 
-const hasOwn = (obj: Record<string, any>, key: string): boolean => {
+export const hasOwn = (obj: Record<string, any>, key: string): boolean => {
   return Object.prototype.hasOwnProperty.call(obj, key);
 };
 

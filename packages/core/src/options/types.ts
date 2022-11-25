@@ -3,7 +3,7 @@ import { ComputedOption } from "./computed";
 import { EmitsOption } from "./emits";
 import { MethodOption } from "./methods";
 import { MixinOption } from "./mixins";
-import { PropertyOption } from "./props";
+import { PropsOption } from "./props";
 import { SetupOption } from "./setup";
 import { WatchOption } from "./watch";
 import { ComponentInstance } from "../instance";
@@ -12,15 +12,15 @@ export type IAnyObject = WechatMiniprogram.IAnyObject;
 
 export type ComponentOptions<
   TData extends WechatMiniprogram.Component.DataOption = WechatMiniprogram.Component.DataOption,
-  TProperty extends PropertyOption = PropertyOption,
+  TProp extends PropsOption = PropsOption,
   TMethod extends MethodOption = MethodOption,
   TComputed extends ComputedOption = ComputedOption,
   TEmit extends EmitsOption = EmitsOption,
   TCustomInstanceProperty extends IAnyObject = IAnyObject,
   TOptions extends IAnyObject = IAnyObject,
 > = {
-  setup?: SetupOption<TEmit>;
-  properties?: TProperty;
+  setup?: SetupOption<TProp, TEmit>;
+  props?: TProp;
   emits?: TEmit | Array<keyof TEmit>;
   data?: TData;
   methods?: TMethod;
@@ -29,9 +29,7 @@ export type ComponentOptions<
   mixins?: MixinOption;
 } & Partial<WechatMiniprogram.Component.OtherOption> &
   WechatMiniprogram.Component.Lifetimes["lifetimes"] &
-  ThisType<
-    ComponentInstance<TData, TProperty, TMethod, TComputed, TCustomInstanceProperty, false>
-  > &
+  ThisType<ComponentInstance<TData, TProp, TMethod, TComputed, TCustomInstanceProperty, false>> &
   TOptions;
 
 export type PageOptions<

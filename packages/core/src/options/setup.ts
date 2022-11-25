@@ -1,14 +1,15 @@
-import { SETUP_KEY, SETUP_REACTIVE_KEY, warn, isFn, isObj } from "@vump/shared";
-import { reactive, unref } from "@vue/reactivity";
+import { SETUP_KEY, SETUP_REACTIVE_KEY, PROP_KEY, warn, isFn, isObj } from "@vump/shared";
+import { reactive, readonly, unref } from "@vue/reactivity";
 import { ComponentInternalInstance } from "../instance";
 import { EmitFn, EmitsOption } from "./emits";
+import { ExtractPropTypes, PropsOption } from "./props";
 
 export interface SetupContext<E> {
   emit: EmitFn<E>;
 }
 
-export type SetupOption<E = EmitsOption> = (
-  props: Readonly<Record<string, any>>,
+export type SetupOption<T extends PropsOption = PropsOption, E = EmitsOption> = (
+  props: Readonly<ExtractPropTypes<T>>,
   ctx: SetupContext<E>,
 ) => Record<string, any>;
 
@@ -24,8 +25,9 @@ export const initSetup = (instance: ComponentInternalInstance, setupOption?: Set
 
   const emit: EmitFn = instance.triggerEvent;
 
-  const props = {};
-  const setupState = setupOption.call(instance, props, { emit });
+  const propsValues = readonly(instance[PROP_KEY]);
+
+  const setupState = setupOption.call(instance, propsValues, { emit });
   if (!isObj(setupState)) {
     warn(
       `setup() should return an object. Received: ${
@@ -50,7 +52,6 @@ export const initSetup = (instance: ComponentInternalInstance, setupOption?: Set
         configurable: true,
         get: () => unref(val),
         set: (v) => {
-          // c.value = v;
           reactiveData[k] = v;
         },
       });

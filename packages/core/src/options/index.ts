@@ -4,6 +4,7 @@ import {
   DATA_KEY,
   COMPUTED_KEY,
   SETUP_REACTIVE_KEY,
+  PROP_KEY,
   SCOPE_KEY,
   IS_PAGE_KEY,
   HOOK_KEY,
@@ -19,13 +20,16 @@ import { initSetup } from "./setup";
 import { LifecycleHooks } from "../lifecycle/index";
 import { callHook } from "../lifecycle/callHook";
 import { ComponentOptions } from "./types";
+import { initProps } from "./props";
 
 const vueStyleBehavior = (isPage: boolean) => {
   let defFields = {} as ComponentOptions;
 
   function definitionFilter(fields: Record<string, any>) {
     defFields = fields as unknown as ComponentOptions;
+    initProps(defFields);
   }
+
   function created(this: unknown) {
     const context = this as unknown as ComponentInternalInstance;
     context[IS_PAGE_KEY] = isPage;
@@ -61,8 +65,15 @@ const vueStyleBehavior = (isPage: boolean) => {
     context[SCOPE_KEY] = scope;
     setCurrentInstance(context);
 
+    const propKeys = defFields.props ? Object.keys(defFields.props) : [];
+
     scope.run(() => {
-      initData(context, defFields.data);
+      if (defFields[PROP_KEY]) {
+        context[PROP_KEY] = defFields[PROP_KEY];
+        delete defFields[PROP_KEY];
+      }
+
+      initData(context, defFields.data, propKeys);
       initComputed(context, defFields.computed);
       initWatch(context, defFields.watch);
       pauseTracking();
@@ -219,7 +230,7 @@ const vueStyleBehavior = (isPage: boolean) => {
     };
   }
 
-  return {
+  const options: WechatMiniprogram.Component.Options<any, any, any> = {
     lifetimes: {
       created,
       attached,
@@ -230,6 +241,8 @@ const vueStyleBehavior = (isPage: boolean) => {
     definitionFilter,
     ...otherOptions,
   };
+
+  return options;
 };
 
 export const createVueStyleBehavior = (isPage: boolean) => Behavior(vueStyleBehavior(isPage));
