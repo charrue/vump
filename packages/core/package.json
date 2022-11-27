@@ -21,7 +21,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charrue/reactivity": "workspace:*"
+    "@charrue/reactivity": "latest"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^3.4.6",
