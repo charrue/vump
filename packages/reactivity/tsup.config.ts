@@ -5,6 +5,9 @@ export default defineConfig({
   define: {
     "process.env.NODE_ENV": "production",
   },
-  dts: true,
+  // dts: true,
+  dts: {
+    resolve: true,
+  },
   format: ["esm", "cjs"],
 });
