@@ -1,6 +1,6 @@
 {
   "name": "@charrue/vump",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "🚴类Vue语法的微信小程序轻量级工具库, 基于原生开发标准",
   "keywords": [
     "typescript",

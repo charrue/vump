@@ -64,12 +64,7 @@ export const initWatch = (instance: ComponentInternalInstance, watchOption?: Wat
     }
 
     if (isPlainObj(watchValue)) {
-      const {
-        deep = false,
-        immediate = false,
-        onTrack,
-        onTrigger,
-      } = watchValue as ObjectWatchOptionItem;
+      const { deep = false, immediate = false } = watchValue as ObjectWatchOptionItem;
       let { handler } = watchValue;
       if (isFn(handler)) {
         handler = handler.bind(instance);
@@ -81,8 +76,6 @@ export const initWatch = (instance: ComponentInternalInstance, watchOption?: Wat
         watch<any, boolean>(getter, handler.bind(instance), {
           deep,
           immediate,
-          onTrack,
-          onTrigger,
         });
       } else {
         warn(`Invalid watch handler specified by key "${watchValue.handler}"`, handler);
