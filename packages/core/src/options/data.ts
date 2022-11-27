@@ -1,6 +1,6 @@
 import { DATA_KEY, EMPTY_OBJ, isFn, isObj, warn, isEmpty } from "../helper/index";
 import { ComponentInternalInstance } from "../instance";
-import { reactive } from "@vue/reactivity";
+import { reactive } from "@charrue/reactivity";
 
 export type DataOption = Record<string, any>;
 

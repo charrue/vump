@@ -1,4 +1,4 @@
-import { reactive } from "@vue/reactivity";
+import { reactive } from "@charrue/reactivity";
 import { PROP_KEY, isArr, isPlainObj, isFn, hasOwn } from "../helper/index";
 import { ComponentOptions } from "./types";
 

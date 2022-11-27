@@ -1,4 +1,4 @@
-import { effect, effectScope, pauseTracking, proxyRefs, resetTracking } from "@vue/reactivity";
+import { effect, effectScope, pauseTracking, proxyRefs, resetTracking } from "@charrue/reactivity";
 import {
   warn,
   DATA_KEY,

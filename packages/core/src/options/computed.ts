@@ -1,11 +1,11 @@
 import { COMPUTED_KEY, isFn, warn } from "../helper/index";
-import { computed } from "@vue/reactivity";
+import { computed } from "@charrue/reactivity";
 import type {
   ComputedGetter,
   WritableComputedRef,
   ComputedSetter,
   WritableComputedOptions,
-} from "@vue/reactivity";
+} from "@charrue/reactivity";
 import { ComponentInternalInstance } from "../instance";
 
 export type ComputedOption = Record<string, ComputedGetter<any> | WritableComputedOptions<any>>;

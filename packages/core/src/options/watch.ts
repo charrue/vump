@@ -1,8 +1,8 @@
 import { isPlainObj, isFn, isStr, warn } from "../helper/index";
 import { ComponentInternalInstance } from "../instance";
-import { watch } from "@vue-reactivity/watch";
+import { watch } from "@charrue/reactivity";
 
-import type { ReactiveEffectOptions } from "@vue/reactivity";
+import type { ReactiveEffectOptions } from "@charrue/reactivity";
 
 type OnCleanup = (cleanupFn: () => void) => void;
 

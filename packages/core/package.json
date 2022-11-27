@@ -1,6 +1,6 @@
 {
   "name": "@charrue/vump",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "🚴类Vue语法的微信小程序轻量级工具库, 基于原生开发标准",
   "keywords": [
     "typescript",
@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.mjd",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -22,8 +22,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@vue-reactivity/watch": "^0.2.0",
-    "@vue/reactivity": "3.2.41"
+    "@charrue/reactivity": "workspace:*"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^3.4.6",

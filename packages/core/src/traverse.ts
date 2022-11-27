@@ -1,4 +1,4 @@
-import { isRef } from "@vue/reactivity";
+import { isRef } from "@charrue/reactivity";
 import { isObj, isArr, isSet, isMap, isPlainObj } from "./helper/index";
 
 enum ReactiveFlags {

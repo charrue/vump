@@ -1,4 +1,4 @@
-import { proxyRefs } from "@vue/reactivity";
+import { proxyRefs } from "@charrue/reactivity";
 import { describe, expect, test, vi } from "vitest";
 import { COMPUTED_KEY } from "../src/helper/index";
 import { createComponent } from "./helper";
