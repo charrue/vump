@@ -1,4 +1,4 @@
-import { PLUGIN_KEY } from "@vump/shared";
+import { PLUGIN_KEY } from "../helper/index";
 import { ComponentOptions } from "../options/types";
 
 const createGlobalPluginFactory = () => {

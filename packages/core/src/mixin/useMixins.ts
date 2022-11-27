@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { mergeDataOptions, mergeLifecycleOptions, mergeMethodOptions } from "./merge-options";
 import { PAGE_LIFETIMES, COMPONENT_LIFETIMES, APP_LIFETIMES } from "../lifecycle";
-import { isFn } from "@vump/shared";
+import { isFn } from "../helper/index";
 import { MixinOption } from "../options/mixins";
 
 const allLifetimes = Array.from(

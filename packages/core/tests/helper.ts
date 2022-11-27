@@ -4,6 +4,12 @@ import exparser from "miniprogram-exparser";
 import { resolve } from "path";
 import { createVueStyleBehavior } from "../src/options/index";
 import { vi } from "vitest";
+import { ComponentOptions } from "../src/options/types";
+import { DataOption } from "../src/options/data";
+import { PropsOption } from "../src/options/props";
+import { ComputedOption } from "../src/options/computed";
+import { MethodOption } from "../src/options/methods";
+import { EmitsOption } from "../src/options/emits";
 
 const originLoad = simulate.load;
 
@@ -26,7 +32,16 @@ const helper = {
   },
 };
 
-export const createComponent = (options: Record<string, any> = {}, isPage = false) => {
+export const createComponent = <
+  TData extends DataOption = DataOption,
+  TProp extends PropsOption = PropsOption,
+  TComputed extends ComputedOption = ComputedOption,
+  TMethod extends MethodOption = MethodOption,
+  TEmit extends EmitsOption = EmitsOption,
+>(
+  options: ComponentOptions<TData, TProp, TMethod, TComputed, TEmit> = {},
+  isPage = false,
+) => {
   const setDataSpy = vi.fn();
   const componentId = helper.load({
     template: "<view></view>",
@@ -58,7 +73,15 @@ export const createComponent = (options: Record<string, any> = {}, isPage = fals
   };
 };
 
-export const loadComponent = (options: Record<string, any> = {}) => {
+export const loadComponent = <
+  TData extends DataOption = DataOption,
+  TProp extends PropsOption = PropsOption,
+  TComputed extends ComputedOption = ComputedOption,
+  TMethod extends MethodOption = MethodOption,
+  TEmit extends EmitsOption = EmitsOption,
+>(
+  options: ComponentOptions<TData, TProp, TMethod, TComputed, TEmit> = {},
+) => {
   const componentId = helper.load({
     template: "<view></view>",
     behaviors: [createVueStyleBehavior(false)],

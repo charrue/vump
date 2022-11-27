@@ -9,7 +9,7 @@ import {
   IS_PAGE_KEY,
   HOOK_KEY,
   isEmpty,
-} from "@vump/shared";
+} from "../helper/index";
 import { ComponentInternalInstance, setCurrentInstance, unsetCurrentInstance } from "../instance";
 import { queueJob } from "../scheduler";
 import { diffData } from "../diff/index";

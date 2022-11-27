@@ -1,4 +1,4 @@
-import { isPlainObj, isFn, isStr, warn } from "@vump/shared";
+import { isPlainObj, isFn, isStr, warn } from "../helper/index";
 import { ComponentInternalInstance } from "../instance";
 import { watch } from "@vue-reactivity/watch";
 

@@ -1,6 +1,6 @@
 {
   "name": "@charrue/vump",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "🚴类Vue语法的微信小程序轻量级工具库, 基于原生开发标准",
   "keywords": [
     "typescript",
@@ -21,13 +21,14 @@
     "lint": "eslint --fix src/**/*.ts",
     "test": "vitest"
   },
-  "devDependencies": {
+  "dependencies": {
     "@vue-reactivity/watch": "^0.2.0",
-    "@vue/reactivity": "3.2.41",
-    "@vump/shared": "workspace:*",
+    "@vue/reactivity": "3.2.41"
+  },
+  "devDependencies": {
     "miniprogram-api-typings": "^3.4.6",
     "miniprogram-exparser": "^2.15.0",
     "miniprogram-simulate": "^1.5.7",
-    "tsup": "^6.4.0"
+    "ts-toolbelt": "^9.6.0"
   }
 }

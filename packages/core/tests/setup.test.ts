@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { ref, reactive, proxyRefs, computed } from "@vue/reactivity";
-import { SETUP_REACTIVE_KEY } from "@vump/shared";
+import { SETUP_REACTIVE_KEY } from "../src/helper/index";
 import { nextTick } from "../src/scheduler";
 import { createComponent } from "./helper";
 

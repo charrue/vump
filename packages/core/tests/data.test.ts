@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { DATA_KEY } from "@vump/shared";
+import { DATA_KEY } from "../src/helper/index";
 import { nextTick } from "../src/scheduler";
 import { createComponent } from "./helper";
 

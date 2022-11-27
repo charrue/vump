@@ -1,6 +1,6 @@
 import { proxyRefs } from "@vue/reactivity";
 import { describe, expect, test, vi } from "vitest";
-import { COMPUTED_KEY } from "@vump/shared";
+import { COMPUTED_KEY } from "../src/helper/index";
 import { createComponent } from "./helper";
 import { nextTick } from "../src/scheduler";
 
@@ -62,6 +62,9 @@ describe("computed option", () => {
         b: {
           set(this: any, v: number) {
             this.a = v;
+          },
+          get() {
+            return this.a;
           },
         },
       },

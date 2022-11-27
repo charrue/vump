@@ -1,5 +1,5 @@
 import { reactive } from "@vue/reactivity";
-import { PROP_KEY, isArr, isPlainObj, isFn, hasOwn } from "@vump/shared";
+import { PROP_KEY, isArr, isPlainObj, isFn, hasOwn } from "../helper/index";
 import { ComponentOptions } from "./types";
 
 type IfAny<T, Y, N> = 0 extends 1 & T ? Y : N;

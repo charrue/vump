@@ -1,4 +1,4 @@
-import { COMPUTED_KEY, isFn, warn } from "@vump/shared";
+import { COMPUTED_KEY, isFn, warn } from "../helper/index";
 import { computed } from "@vue/reactivity";
 import type {
   ComputedGetter,

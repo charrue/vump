@@ -1,4 +1,4 @@
-import { HOOK_KEY, warn, isArr, IS_PAGE_KEY } from "@vump/shared";
+import { HOOK_KEY, warn, isArr, IS_PAGE_KEY } from "../helper/index";
 import { pauseTracking, resetTracking } from "@vue/reactivity";
 import {
   getCurrentInstance,

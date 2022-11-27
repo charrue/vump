@@ -1,4 +1,4 @@
-import { SETUP_KEY, SETUP_REACTIVE_KEY, PROP_KEY, warn, isFn, isObj } from "@vump/shared";
+import { SETUP_KEY, SETUP_REACTIVE_KEY, PROP_KEY, warn, isFn, isObj } from "../helper/index";
 import { reactive, readonly, unref } from "@vue/reactivity";
 import { ComponentInternalInstance } from "../instance";
 import { EmitFn, EmitsOption } from "./emits";

@@ -1,4 +1,4 @@
-import { isFn } from "@vump/shared";
+import { isFn } from "./helper/index";
 
 let queued = false;
 const queue: Array<(...args: any[]) => any> = [];

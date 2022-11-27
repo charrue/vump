@@ -1,4 +1,4 @@
-import { warn, isFn, isPromise, isArr } from "@vump/shared";
+import { warn, isFn, isPromise, isArr } from "./helper/index";
 import { ComponentInternalInstance } from "./instance";
 
 export function callWithErrorHandling(

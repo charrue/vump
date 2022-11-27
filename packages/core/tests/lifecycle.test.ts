@@ -15,18 +15,6 @@ describe("common", () => {
     });
   });
 
-  test("return undefined", () => {
-    createComponent({
-      setup() {
-        const res = onCreated(async () => {
-          return 1;
-        });
-        expect(res).toBe(undefined);
-        return {};
-      },
-    });
-  });
-
   // 无法触发Page的生命周期
   test.skip("lifecycle call order", () => {
     const calls: string[] = [];

@@ -1,4 +1,4 @@
-import { mergeLeft, omit, pick } from "@vump/shared";
+import { mergeLeft, omit, pick } from "../helper/index";
 import { HOOKS_HAS_RETURN, PAGE_LIFETIMES, COMPONENT_LIFETIMES } from "../lifecycle/index";
 import type { PlainObject, Keyof, Fn } from "../types";
 

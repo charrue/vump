@@ -1,4 +1,4 @@
-import { DATA_KEY, EMPTY_OBJ, isFn, isObj, warn, isEmpty } from "@vump/shared";
+import { DATA_KEY, EMPTY_OBJ, isFn, isObj, warn, isEmpty } from "../helper/index";
 import { ComponentInternalInstance } from "../instance";
 import { reactive } from "@vue/reactivity";
 
