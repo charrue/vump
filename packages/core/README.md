@@ -9,7 +9,7 @@
 - [x] TypeScript支持
 - [x] 基于[wxstore](https://github.com/Tencent/westore)的data diff
 - [x] 插件功能
-- [ ] Composition API
+- [x] Composition API
 
 
 
@@ -22,98 +22,52 @@ npm install @charrue/vump
 ## 使用
 
 ### 基础使用
+
 ``` javascript
-// counter.js
-import { createComponent } from "@charrue/vump";
-import mixin from "./mixin"
+import { createComponent, ref, computed, watch, onCreated, onMounted } from "@charrue/vump";
 
 createComponent({
-  mixins: [mixin],
-  data: {
-    count: 0,
-    nextCount: 1
+  props: {
+    default: {
+      type: Number,
+      default: 0
+    }
   },
-  computed: {
-    sign() {
-      if (this.count === 0) return "";
+  setup(props) {
+    const count = ref(props.default);
+    const nextCount = ref(1);
 
-      return this.count > 0 ? "+" : "-";
-    },
-  },
-  watch: {
-    count(val) {
-      this.nextCount = val + 1
-    },
-  },
-  methods: {
-    onIncrease() {
-      this.count += 1;
-    },
-    onDecrease() {
-      this.count -= 1;
-    },
-  },
-});
+    const sign = computed(() => {
+      if (count.value === 0) return "";
+      return count.value > 0 ? "+" : "-";
+    });
+    watch(count, (val) => {
+      nextCount.value = val + 1;
+    });
 
-```
+    const onIncrease = () => {
+      count.value += 1;
+    }
+    const onDecrease = () => {
+      count.value -= 1;
+    }
 
-``` javascript
-// mixin.js
-export default {
-  attached() {
-    this.resetList()
+    onCreated(() => {
+      console.log("component created")
+    })
+    onMounted(() => {
+      console.log("component attached")
+    })
+
+    return {
+      count,
+      sign,
+      nextCount,
+
+      onIncrease,
+      onDecrease,
+    }
   }
-}
-```
-
-
-
-### 插件使用
-
-```
-npm install --save mobx-miniprogram mobx-miniprogram-bindings
-```
-
-``` javascript
-// app.js
-import { usePlugin } from "@charrue/vump";
-import { storeBindingsBehavior } from "mobx-miniprogram-bindings";
-
-usePlugin({
-  behaviors: [storeBindingsBehavior],
-})
-
-App({})
-```
-
-
-``` javascript
-// counter.js
-import { createComponent } from "@charrue/vump";
-
-import { store } from "./store";
-
-createComponent({
-  data: {
-    someData: "...",
-  },
-  storeBindings: {
-    store,
-    fields: {
-      numA: () => store.numA,
-      numB: (store) => store.numB,
-      sum: "sum",
-    },
-    actions: {
-      buttonTap: "update",
-    },
-  },
-  methods: {
-    myMethod() {
-      // 来自于 MobX store 的字段
-      console.log(this.data.sum);
-    },
-  },
 });
-
 ```
+
