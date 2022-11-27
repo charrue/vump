@@ -1,0 +1,25 @@
+{
+  "name": "@charrue/reactivity",
+  "version": "0.0.1",
+  "description": "适用于微信小程序的响应式库",
+  "keywords": [
+    "miniprogram",
+    "reactivity",
+    "charrue"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@vue-reactivity/watch": "^0.2.0",
+    "@vue/reactivity": "3.2.41"
+  }
+}
