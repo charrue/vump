@@ -1,6 +1,6 @@
 {
   "name": "@charrue/vump",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "🚴类Vue语法的微信小程序轻量级工具库, 基于原生开发标准",
   "keywords": [
     "typescript",
@@ -9,15 +9,15 @@
     "charrue"
   ],
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjd",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md"
   ],
   "scripts": {
     "build": "tsup",
-    "postbuild": "node scripts/rename-ext.js",
     "lint": "eslint --fix src/**/*.ts",
     "test": "vitest"
   },

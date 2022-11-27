@@ -4,7 +4,7 @@ export default defineConfig({
   entry: ["src/index.ts"],
   clean: true,
   dts: true,
-  format: ["esm"],
+  format: ["cjs", "esm"],
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
