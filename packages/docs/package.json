@@ -1,0 +1,18 @@
+{
+  "name": "docs",
+  "private": "true",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "deploy": "npm run build && gh-pages -d .vitepress/dist -t true"
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "vitepress": "latest"
+  }
+}
