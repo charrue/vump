@@ -1,0 +1,1 @@
+import{_ as e,c as i,o as a,d as l}from"./app.e51fabfc.js";const f=JSON.parse('{"title":"\u751F\u547D\u5468\u671F","description":"","frontmatter":{},"headers":[],"relativePath":"essential/lifecycle.md"}'),o={name:"essential/lifecycle.md"},t=l("",3),n=[t];function c(d,r,s,_,p,h){return a(),i("div",null,n)}const g=e(o,[["render",c]]);export{f as __pageData,g as default};
