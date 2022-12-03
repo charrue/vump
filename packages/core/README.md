@@ -1,5 +1,16 @@
-<h1 align="center"><span style="color: #34495e">vump</span></h1>
+<center>
+<a href="https://charrue.github.io/vump/">
+  <img src="https://charrue.github.io/vump/vump.svg" />
+</a>
+</center>
 <p align="center">🚴类Vue语法的微信小程序轻量级工具库，基于原生开发标准</p>
+<a href="https://charrue.github.io/vump/">
+  <h1 align="center">vump</h1>
+</a>
+
+
+
+[![npm](https://img.shields.io/npm/v/@charrue/vump)](https://www.npmjs.com/package/@charrue/vump)
 
 ## 特性
 
@@ -16,7 +27,7 @@
 ### 下载
 
 ``` bash
-npm install @charrue/vump
+npm install @charrue/vump @charrue/reactivity -S
 ```
 
 ## 使用
@@ -70,4 +81,6 @@ createComponent({
   }
 });
 ```
+
+更多使用请查看[文档](https://charrue.github.io/vump/)。
 
